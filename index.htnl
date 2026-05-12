@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GreenScape Pro | Professional Landscaping</title>
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:   #1a3c2a;
+      --green-mid:    #2d6a4f;
+      --green-light:  #52b788;
+      --green-accent: #74c69d;
+      --gold:         #d4a853;
+      --gold-light:   #f0c97a;
+      --white:        #ffffff;
+      --off-white:    #f8f7f2;
+      --text-dark:    #1c1c1c;
+      --text-mid:     #4a4a4a;
+      --text-light:   #7a7a7a;
+      --shadow-sm:    0 2px 8px rgba(0,0,0,.10);
+      --shadow-md:    0 6px 24px rgba(0,0,0,.14);
+      --shadow-lg:    0 16px 48px rgba(0,0,0,.18);
+      --radius:       12px;
+      --transition:   .3s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', serif;
+      color: var(--text-dark);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 6%;
+      height: 72px;
+      background: rgba(26,60,42,.95);
+      backdrop-filter: blur(10px);
+      transition: box-shadow var(--transition);
+    }
+    nav.scrolled { box-shadow: var(--shadow-md); }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 40px; height: 40px;
+      background: var(--green-light);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .nav-logo-text {
+      font-size: 1.3rem; font-weight: bold; color: var(--white);
+      letter-spacing: .5px;
+    }
+    .nav-logo-text span { color: var(--gold); }
+
+    .nav-links {
+      display: flex; gap: 36px; list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,.85);
+      text-decoration: none;
+      font-size: .9rem; letter-spacing: .5px;
+      text-transform: uppercase;
+      transition: color var(--transition);
+      font-family: 'Arial', sans-serif;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--green-dark) !important;
+      padding: 8px 22px;
+      border-radius: 4px;
+      font-weight: bold !important;
+      transition: background var(--transition) !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; color: var(--green-dark) !important; }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 26px; height: 2px; background: var(--white); border-radius: 2px; transition: all .3s; }
+
+    /* ─── HERO ─── */
+    #hero {
+      height: 100vh; min-height: 640px;
+      background:
+        linear-gradient(to bottom, rgba(26,60,42,.62) 0%, rgba(0,0,0,.5) 100%),
+        url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1600&q=80') center/cover no-repeat;
+      display: flex; align-items: center;
+      padding: 0 6%;
+    }
+    .hero-content { max-width: 680px; }
+    .hero-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--green-dark);
+      font-family: 'Arial', sans-serif;
+      font-size: .78rem; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 4px; margin-bottom: 24px;
+    }
+    .hero-title {
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .hero-title span { color: var(--green-accent); }
+    .hero-sub {
+      font-family: 'Arial', sans-serif;
+      font-size: 1.05rem; color: rgba(255,255,255,.88);
+      line-height: 1.7; margin-bottom: 36px; max-width: 520px;
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--green-dark);
+      padding: 14px 34px;
+      border-radius: 4px;
+      font-family: 'Arial', sans-serif; font-weight: bold; font-size: .95rem;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      padding: 14px 34px;
+      border-radius: 4px;
+      font-family: 'Arial', sans-serif; font-weight: bold; font-size: .95rem;
+      text-decoration: none; border: 2px solid rgba(255,255,255,.7); cursor: pointer;
+      transition: all var(--transition);
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,.1); }
+
+    .hero-stats {
+      display: flex; gap: 48px; margin-top: 56px; flex-wrap: wrap;
+    }
+    .stat { text-align: left; }
+    .stat-number { font-size: 2rem; color: var(--gold); font-weight: bold; }
+    .stat-label { font-family: 'Arial', sans-serif; font-size: .8rem; color: rgba(255,255,255,.7); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ─── SECTION SHARED ─── */
+    section { padding: 90px 6%; }
+    .section-eyebrow {
+      font-family: 'Arial', sans-serif;
+      font-size: .78rem; font-weight: bold; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--green-light); margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      color: var(--green-dark); line-height: 1.25; margin-bottom: 18px;
+    }
+    .section-desc {
+      font-family: 'Arial', sans-serif;
+      color: var(--text-mid); font-size: 1rem; line-height: 1.75;
+      max-width: 580px;
+    }
+    .center { text-align: center; }
+    .center .section-desc { margin: 0 auto 56px; }
+
+    /* ─── SERVICES ─── */
+    #services { background: var(--off-white); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin-top: 56px;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition), box-shadow var(--transition);
+      border-top: 4px solid transparent;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+      border-top-color: var(--green-light);
+    }
+    .service-icon {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--green-mid), var(--green-light));
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; margin-bottom: 22px;
+    }
+    .service-title {
+      font-size: 1.15rem; color: var(--green-dark);
+      margin-bottom: 12px;
+    }
+    .service-desc {
+      font-family: 'Arial', sans-serif;
+      color: var(--text-mid); font-size: .9rem; line-height: 1.7;
+    }
+
+    /* ─── ABOUT / SPLIT ─── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+    .about-img-wrap { position: relative; }
+    .about-img {
+      width: 100%; border-radius: var(--radius);
+      height: 520px; object-fit: cover;
+      box-shadow: var(--shadow-lg);
+    }
+    .about-badge-float {
+      position: absolute; bottom: -24px; right: -24px;
+      background: var(--gold);
+      color: var(--green-dark);
+      border-radius: 14px;
+      padding: 22px 28px;
+      box-shadow: var(--shadow-md);
+      text-align: center;
+    }
+    .about-badge-float .big { font-size: 2.2rem; font-weight: bold; }
+    .about-badge-float .small { font-family: 'Arial', sans-serif; font-size: .8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+
+    .about-features { margin: 28px 0; }
+    .about-feature {
+      display: flex; align-items: flex-start; gap: 14px;
+      margin-bottom: 20px;
+    }
+    .feature-icon {
+      width: 36px; height: 36px; flex-shrink: 0;
+      background: rgba(82,183,136,.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .feature-text h4 { color: var(--green-dark); font-size: .95rem; margin-bottom: 4px; }
+    .feature-text p { font-family: 'Arial', sans-serif; color: var(--text-mid); font-size: .87rem; line-height: 1.6; }
+
+    /* ─── PROCESS ─── */
+    #process { background: var(--green-dark); }
+    #process .section-title { color: var(--white); }
+    #process .section-eyebrow { color: var(--gold); }
+    #process .section-desc { color: rgba(255,255,255,.75); }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+      margin-top: 56px;
+    }
+    .process-step {
+      text-align: center; padding: 32px 24px;
+      background: rgba(255,255,255,.06);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.1);
+      transition: background var(--transition);
+    }
+    .process-step:hover { background: rgba(255,255,255,.1); }
+    .step-number {
+      width: 52px; height: 52px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; font-weight: bold; color: var(--green-dark);
+      margin: 0 auto 20px;
+    }
+    .step-title { color: var(--white); font-size: 1.05rem; margin-bottom: 10px; }
+    .step-desc { font-family: 'Arial', sans-serif; color: rgba(255,255,255,.65); font-size: .87rem; line-height: 1.65; }
+
+    /* ─── PORTFOLIO ─── */
+    #portfolio {}
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 260px 260px;
+      gap: 16px;
+      margin-top: 56px;
+    }
+    .portfolio-item {
+      position: relative; border-radius: var(--radius); overflow: hidden; cursor: pointer;
+    }
+    .portfolio-item:first-child { grid-row: span 2; }
+
+    .portfolio-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .5s ease;
+    }
+    .portfolio-item:hover img { transform: scale(1.07); }
+    .portfolio-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(26,60,42,.9) 0%, transparent 60%);
+      opacity: 0; transition: opacity var(--transition);
+      display: flex; align-items: flex-end; padding: 24px;
+    }
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+    .portfolio-overlay-text h4 { color: var(--white); font-size: 1rem; margin-bottom: 4px; }
+    .portfolio-overlay-text span { color: var(--green-accent); font-family: 'Arial', sans-serif; font-size: .82rem; }
+
+    /* ─── TESTIMONIALS ─── */
+    #testimonials { background: var(--off-white); }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+      margin-top: 56px;
+    }
+    .testimonial-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+    .testimonial-quote {
+      font-size: 4rem; color: var(--green-light);
+      opacity: .3; line-height: 1;
+      position: absolute; top: 16px; left: 28px;
+      font-family: Georgia, serif;
+    }
+    .testimonial-text {
+      font-style: italic; font-size: .97rem; line-height: 1.75;
+      color: var(--text-mid); margin-bottom: 24px; margin-top: 16px;
+    }
+    .testimonial-author { display: flex; align-items: center; gap: 14px; }
+    .author-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green-mid), var(--green-accent));
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white); font-weight: bold; font-size: 1.1rem;
+    }
+    .author-name { font-weight: bold; color: var(--green-dark); font-size: .95rem; }
+    .author-location { font-family: 'Arial', sans-serif; font-size: .8rem; color: var(--text-light); }
+    .stars { color: var(--gold); font-size: .9rem; margin-bottom: 16px; }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: start;
+    }
+    .contact-info { padding-top: 8px; }
+    .contact-details { margin: 32px 0; }
+    .contact-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      margin-bottom: 24px;
+    }
+    .contact-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--green-mid), var(--green-light));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .contact-item-text h4 { color: var(--green-dark); margin-bottom: 4px; font-size: .95rem; }
+    .contact-item-text p { font-family: 'Arial', sans-serif; color: var(--text-mid); font-size: .9rem; }
+
+    .contact-form {
+      background: var(--off-white);
+      border-radius: var(--radius);
+      padding: 44px 40px;
+      box-shadow: var(--shadow-sm);
+    }
+    .form-title { font-size: 1.4rem; color: var(--green-dark); margin-bottom: 28px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-family: 'Arial', sans-serif; font-size: .82rem; font-weight: bold;
+      color: var(--text-mid); text-transform: uppercase; letter-spacing: .5px;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e0ddd4;
+      border-radius: 8px;
+      font-family: 'Arial', sans-serif; font-size: .93rem;
+      color: var(--text-dark);
+      background: var(--white);
+      transition: border-color var(--transition);
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--green-light); }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-submit {
+      width: 100%; padding: 15px;
+      background: var(--green-mid);
+      color: var(--white); border: none;
+      border-radius: 8px; font-family: 'Arial', sans-serif;
+      font-size: 1rem; font-weight: bold; cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      letter-spacing: .5px;
+    }
+    .form-submit:hover { background: var(--green-dark); transform: translateY(-2px); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--green-dark);
+      padding: 64px 6% 32px;
+      color: rgba(255,255,255,.75);
+      font-family: 'Arial', sans-serif;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand p { font-size: .9rem; line-height: 1.7; margin: 16px 0 24px; }
+    .footer-social { display: flex; gap: 12px; }
+    .social-btn {
+      width: 38px; height: 38px;
+      background: rgba(255,255,255,.1);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; text-decoration: none;
+      transition: background var(--transition);
+      cursor: pointer;
+    }
+    .social-btn:hover { background: var(--green-light); }
+
+    .footer-col h4 { color: var(--white); font-size: .95rem; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a { color: rgba(255,255,255,.65); text-decoration: none; font-size: .88rem; transition: color var(--transition); }
+    .footer-col a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding-top: 28px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-size: .83rem; }
+
+    /* ─── SCROLL-TO-TOP ─── */
+    .scroll-top {
+      position: fixed; bottom: 32px; right: 32px;
+      width: 46px; height: 46px;
+      background: var(--green-mid);
+      color: var(--white); border: none; border-radius: 50%;
+      font-size: 20px; cursor: pointer;
+      box-shadow: var(--shadow-md);
+      opacity: 0; pointer-events: none;
+      transition: opacity var(--transition), transform var(--transition);
+      z-index: 999;
+    }
+    .scroll-top.visible { opacity: 1; pointer-events: auto; }
+    .scroll-top:hover { transform: translateY(-3px); background: var(--green-dark); }
+
+    /* ─── LANG SELECTOR ─── */
+    .lang-selector { position: relative; }
+    .lang-btn {
+      background: rgba(255,255,255,.12);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 6px;
+      padding: 6px 13px;
+      cursor: pointer;
+      font-family: 'Arial', sans-serif;
+      font-size: .82rem;
+      transition: background var(--transition);
+      white-space: nowrap;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .lang-btn:hover { background: rgba(255,255,255,.22); }
+    .lang-menu {
+      position: absolute; top: calc(100% + 10px); right: 0;
+      background: var(--green-dark);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 10px;
+      min-width: 170px;
+      box-shadow: var(--shadow-lg);
+      display: none; z-index: 2000;
+      overflow: hidden;
+    }
+    .lang-menu.open { display: block; }
+    .lang-menu a {
+      display: block; padding: 10px 16px;
+      color: rgba(255,255,255,.82);
+      font-family: 'Arial', sans-serif; font-size: .87rem;
+      cursor: pointer; transition: background var(--transition);
+      text-decoration: none;
+    }
+    .lang-menu a:hover { background: rgba(255,255,255,.1); }
+    .lang-menu a.active { color: var(--gold); font-weight: bold; }
+
+    /* ─── LANG TOAST ─── */
+    .lang-toast {
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--green-dark); color: var(--white);
+      padding: 12px 24px; border-radius: 8px;
+      font-family: 'Arial', sans-serif; font-size: .88rem;
+      box-shadow: var(--shadow-md);
+      opacity: 0; transition: opacity .4s, transform .4s;
+      z-index: 9999; pointer-events: none; white-space: nowrap;
+    }
+    .lang-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      #about { grid-template-columns: 1fr; gap: 40px; }
+      .about-badge-float { right: 12px; }
+      #contact { grid-template-columns: 1fr; gap: 40px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .portfolio-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .portfolio-item:first-child { grid-row: span 1; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 5%; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 64px 5%; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-stats { gap: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-icon">🌿</div>
+    <span class="nav-logo-text">Green<span>Scape</span> Pro</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services" data-i18n="nav.services">Services</a></li>
+    <li><a href="#about" data-i18n="nav.about">About</a></li>
+    <li><a href="#portfolio" data-i18n="nav.portfolio">Portfolio</a></li>
+    <li><a href="#testimonials" data-i18n="nav.reviews">Reviews</a></li>
+    <li><a href="#contact" class="nav-cta" data-i18n="nav.cta">Free Quote</a></li>
+  </ul>
+  <div class="lang-selector">
+    <button class="lang-btn" id="langBtn" onclick="toggleLangMenu(event)">
+      🌐 <span id="langCode">EN</span> ▾
+    </button>
+    <div class="lang-menu" id="langMenu">
+      <a onclick="setLanguage('en')">🇺🇸 English</a>
+      <a onclick="setLanguage('es')">🇪🇸 Español</a>
+      <a onclick="setLanguage('fr')">🇫🇷 Français</a>
+      <a onclick="setLanguage('de')">🇩🇪 Deutsch</a>
+      <a onclick="setLanguage('pt')">🇧🇷 Português</a>
+      <a onclick="setLanguage('zh')">🇨🇳 中文</a>
+      <a onclick="setLanguage('ar')">🇸🇦 العربية</a>
+      <a onclick="setLanguage('hi')">🇮🇳 हिन्दी</a>
+      <a onclick="setLanguage('ru')">🇷🇺 Русский</a>
+      <a onclick="setLanguage('ja')">🇯🇵 日本語</a>
+    </div>
+  </div>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-badge" data-i18n="hero.badge">Serving the Greater Metro Area Since 2001</div>
+    <h1 class="hero-title" data-i18n-html="hero.title">
+      We Transform Outdoor<br><span>Spaces Into Living Art</span>
+    </h1>
+    <p class="hero-sub" data-i18n="hero.sub">
+      Award-winning landscape design, installation, and maintenance tailored to your vision. From intimate garden retreats to grand commercial estates.
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary" data-i18n="hero.btn.quote">Get a Free Quote</a>
+      <a href="#portfolio" class="btn-outline" data-i18n="hero.btn.work">View Our Work</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number">2,400+</div>
+        <div class="stat-label" data-i18n="hero.stat1">Projects Completed</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">25 yrs</div>
+        <div class="stat-label" data-i18n="hero.stat2">Of Experience</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">4.9★</div>
+        <div class="stat-label" data-i18n="hero.stat3">Average Rating</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="center">
+    <p class="section-eyebrow" data-i18n="svc.eyebrow">What We Do</p>
+    <h2 class="section-title" data-i18n="svc.title">Comprehensive Landscaping Services</h2>
+    <p class="section-desc" data-i18n="svc.desc">From concept to completion, we handle every detail so you can enjoy a beautiful outdoor space without the hassle.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🌱</div>
+      <h3 class="service-title" data-i18n="s1.title">Landscape Design</h3>
+      <p class="service-desc" data-i18n="s1.desc">Custom design plans crafted by certified landscape architects. We blend aesthetics, function, and sustainability for spaces that endure.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">✂️</div>
+      <h3 class="service-title" data-i18n="s2.title">Lawn Care &amp; Maintenance</h3>
+      <p class="service-desc" data-i18n="s2.desc">Regular mowing, edging, fertilization, and seasonal clean-ups. Flexible weekly or bi-weekly programs to keep your lawn pristine year-round.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">💧</div>
+      <h3 class="service-title" data-i18n="s3.title">Irrigation Systems</h3>
+      <p class="service-desc" data-i18n="s3.desc">Smart irrigation design and installation that cuts water usage by up to 40%. We also service and winterize existing systems.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🪨</div>
+      <h3 class="service-title" data-i18n="s4.title">Hardscaping</h3>
+      <p class="service-desc" data-i18n="s4.desc">Patios, retaining walls, pathways, and outdoor kitchens built with premium materials. Structures designed to complement your landscape.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🌳</div>
+      <h3 class="service-title" data-i18n="s5.title">Tree &amp; Shrub Care</h3>
+      <p class="service-desc" data-i18n="s5.desc">ISA-certified arborists for pruning, deep-root fertilization, disease treatment, and safe removal of hazardous trees.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">💡</div>
+      <h3 class="service-title" data-i18n="s6.title">Outdoor Lighting</h3>
+      <p class="service-desc" data-i18n="s6.desc">Professional low-voltage LED landscape lighting to highlight architecture and plantings while extending your outdoor living hours.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-img-wrap">
+    <img
+      class="about-img"
+      src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80"
+      alt="Landscaping team at work"
+    />
+    <div class="about-badge-float">
+      <div class="big">25</div>
+      <div class="small" data-i18n="about.badge">Years of Excellence</div>
+    </div>
+  </div>
+  <div class="about-text">
+    <p class="section-eyebrow" data-i18n="about.eyebrow">About GreenScape Pro</p>
+    <h2 class="section-title" data-i18n="about.title">Rooted in Passion, Grown Through Dedication</h2>
+    <p class="section-desc" data-i18n="about.desc">
+      Founded in 2001 by landscape architect Marcus Cole, GreenScape Pro has grown from a two-person operation into a 60-strong team of horticulturists, designers, and craftspeople. We believe every outdoor space has untapped potential.
+    </p>
+    <div class="about-features">
+      <div class="about-feature">
+        <div class="feature-icon">🏅</div>
+        <div class="feature-text">
+          <h4 data-i18n="about.f1.title">Award-Winning Design Team</h4>
+          <p data-i18n="about.f1.desc">Recipients of the National Landscape Industry Award three years running, recognized for innovative and sustainable design.</p>
+        </div>
+      </div>
+      <div class="about-feature">
+        <div class="feature-icon">♻️</div>
+        <div class="feature-text">
+          <h4 data-i18n="about.f2.title">Eco-Conscious Practices</h4>
+          <p data-i18n="about.f2.desc">We use only organic fertilizers, native plantings, and water-wise techniques to protect local ecosystems.</p>
+        </div>
+      </div>
+      <div class="about-feature">
+        <div class="feature-icon">🔐</div>
+        <div class="feature-text">
+          <h4 data-i18n="about.f3.title">Fully Licensed &amp; Insured</h4>
+          <p data-i18n="about.f3.desc">Every team member is background-checked, certified, and covered under full liability insurance for your peace of mind.</p>
+        </div>
+      </div>
+    </div>
+    <a href="#contact" class="btn-primary" data-i18n="about.cta">Work With Us</a>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="center">
+    <p class="section-eyebrow" data-i18n="proc.eyebrow">How It Works</p>
+    <h2 class="section-title" data-i18n="proc.title">Your Journey to a Beautiful Landscape</h2>
+    <p class="section-desc" style="color:rgba(255,255,255,.7)" data-i18n="proc.desc">A simple, transparent process from first call to final walk-through.</p>
+  </div>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-number">1</div>
+      <h3 class="step-title" data-i18n="p1.title">Free Consultation</h3>
+      <p class="step-desc" data-i18n="p1.desc">We visit your property, discuss your goals, and assess the space. No cost, no obligation — just possibilities.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-number">2</div>
+      <h3 class="step-title" data-i18n="p2.title">Custom Design</h3>
+      <p class="step-desc" data-i18n="p2.desc">Our designers create a detailed plan with 3D renderings so you can visualize the finished result before we break ground.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-number">3</div>
+      <h3 class="step-title" data-i18n="p3.title">Expert Installation</h3>
+      <p class="step-desc" data-i18n="p3.desc">Our skilled crew completes the work on schedule and on budget, with daily updates and zero hidden costs.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-number">4</div>
+      <h3 class="step-title" data-i18n="p4.title">Ongoing Care</h3>
+      <p class="step-desc" data-i18n="p4.desc">Enroll in a maintenance plan and we'll keep your landscape picture-perfect through every season.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="center">
+    <p class="section-eyebrow" data-i18n="port.eyebrow">Our Work</p>
+    <h2 class="section-title" data-i18n="port.title">Recent Projects</h2>
+    <p class="section-desc" data-i18n="port.desc">Every project is unique. Here's a glimpse at some of our favourite recent transformations.</p>
+  </div>
+  <div class="portfolio-grid">
+    <div class="portfolio-item">
+      <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80" alt="Garden design" />
+      <div class="portfolio-overlay">
+        <div class="portfolio-overlay-text">
+          <h4 data-i18n="pr1.title">Lakeside Garden Retreat</h4>
+          <span data-i18n="pr1.type">Residential Design &amp; Installation</span>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-item">
+      <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80" alt="Formal garden" />
+      <div class="portfolio-overlay">
+        <div class="portfolio-overlay-text">
+          <h4 data-i18n="pr2.title">Heritage Estate Formal Garden</h4>
+          <span data-i18n="pr2.type">Design &amp; Maintenance</span>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-item">
+      <img src="https://images.unsplash.com/photo-1593440408186-33e3eb6c2726?w=600&q=80" alt="Pool landscape" />
+      <div class="portfolio-overlay">
+        <div class="portfolio-overlay-text">
+          <h4 data-i18n="pr3.title">Resort-Style Pool Surround</h4>
+          <span data-i18n="pr3.type">Hardscaping &amp; Planting</span>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-item">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Patio" />
+      <div class="portfolio-overlay">
+        <div class="portfolio-overlay-text">
+          <h4 data-i18n="pr4.title">Natural Stone Patio</h4>
+          <span data-i18n="pr4.type">Hardscaping</span>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-item">
+      <img src="https://images.unsplash.com/photo-1416431392832-f4d41a3b2109?w=600&q=80" alt="Night lighting" />
+      <div class="portfolio-overlay">
+        <div class="portfolio-overlay-text">
+          <h4 data-i18n="pr5.title">Moonlit Garden Lighting</h4>
+          <span data-i18n="pr5.type">Outdoor Lighting Design</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="center">
+    <p class="section-eyebrow" data-i18n="tst.eyebrow">Client Stories</p>
+    <h2 class="section-title" data-i18n="tst.title">What Our Clients Say</h2>
+    <p class="section-desc" data-i18n="tst.desc">Don't take our word for it — here's what homeowners and property managers say about working with us.</p>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="testimonial-quote">"</div>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text" data-i18n="t1.text">GreenScape Pro completely transformed our backyard. From the initial design to the final plant, every detail was handled with incredible professionalism. Our neighbours keep asking who did it!</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">SR</div>
+        <div>
+          <div class="author-name" data-i18n="t1.name">Sarah &amp; Robert Mitchell</div>
+          <div class="author-location" data-i18n="t1.loc">Riverside Heights — Residential</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-quote">"</div>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text" data-i18n="t2.text">As a property manager overseeing 12 commercial sites, I need a landscaping partner I can rely on completely. GreenScape Pro delivers consistent quality and always communicates proactively. Worth every penny.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">DK</div>
+        <div>
+          <div class="author-name" data-i18n="t2.name">David Kim</div>
+          <div class="author-location" data-i18n="t2.loc">Urban Properties Group — Commercial</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-quote">"</div>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text" data-i18n="t3.text">The irrigation system they installed cut our water bill nearly in half, and our lawn has never looked better. Their eco-conscious approach was exactly what we were looking for. Highly recommend!</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">LT</div>
+        <div>
+          <div class="author-name" data-i18n="t3.name">Linda Torres</div>
+          <div class="author-location" data-i18n="t3.loc">Green Valley Estates — Residential</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-info">
+    <p class="section-eyebrow" data-i18n="ct.eyebrow">Get In Touch</p>
+    <h2 class="section-title" data-i18n="ct.title">Ready to Transform Your Space?</h2>
+    <p class="section-desc" data-i18n="ct.desc">Request a free, no-obligation consultation. We'll visit your property, discuss your vision, and provide a detailed estimate — usually within 48 hours.</p>
+    <div class="contact-details">
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div class="contact-item-text">
+          <h4 data-i18n="ct.phone.title">Call Us</h4>
+          <p data-i18n="ct.phone.desc">(555) 320-7800 · Mon–Sat 7 am – 6 pm</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">✉️</div>
+        <div class="contact-item-text">
+          <h4 data-i18n="ct.email.title">Email Us</h4>
+          <p>hello@greenscapepro.com</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div class="contact-item-text">
+          <h4 data-i18n="ct.area.title">Service Area</h4>
+          <p data-i18n="ct.area.desc">Metro City and surrounding areas within 60 miles</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-form">
+    <h3 class="form-title" data-i18n="form.title">Request a Free Quote</h3>
+    <form id="quoteForm" onsubmit="handleSubmit(event)" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label data-i18n="form.fname">First Name</label>
+          <input type="text" name="first_name" data-i18n-placeholder="form.fname.ph" placeholder="Jane" required />
+        </div>
+        <div class="form-group">
+          <label data-i18n="form.lname">Last Name</label>
+          <input type="text" name="last_name" data-i18n-placeholder="form.lname.ph" placeholder="Smith" required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label data-i18n="form.phone">Phone</label>
+          <input type="tel" name="phone" placeholder="(555) 000-0000" />
+        </div>
+        <div class="form-group">
+          <label data-i18n="form.email">Email</label>
+          <input type="email" name="reply_to" data-i18n-placeholder="form.email.ph" placeholder="jane@example.com" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label data-i18n="form.service">Service Interested In</label>
+        <select name="service">
+          <option value="" data-i18n="form.svc0">Select a service…</option>
+          <option data-i18n="s1.title">Landscape Design</option>
+          <option data-i18n="s2.title">Lawn Care &amp; Maintenance</option>
+          <option data-i18n="s3.title">Irrigation Systems</option>
+          <option data-i18n="s4.title">Hardscaping</option>
+          <option data-i18n="s5.title">Tree &amp; Shrub Care</option>
+          <option data-i18n="s6.title">Outdoor Lighting</option>
+          <option data-i18n="form.svc7">Multiple Services</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label data-i18n="form.message">Tell Us About Your Project</label>
+        <textarea name="message" data-i18n-placeholder="form.msg.ph" placeholder="Describe your property, goals, timeline, or any questions…"></textarea>
+      </div>
+      <div id="formFeedback" style="display:none;padding:12px 16px;border-radius:8px;font-family:Arial,sans-serif;font-size:.9rem;margin-bottom:16px;"></div>
+      <button type="submit" class="form-submit" id="formSubmitBtn" data-i18n="form.submit">Send My Request →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#hero" class="nav-logo" style="text-decoration:none">
+        <div class="nav-logo-icon">🌿</div>
+        <span class="nav-logo-text">Green<span>Scape</span> Pro</span>
+      </a>
+      <p data-i18n="footer.brand">Creating extraordinary outdoor spaces since 2001. Licensed, insured, and dedicated to transforming your landscape vision into lasting reality.</p>
+      <div class="footer-social">
+        <div class="social-btn">f</div>
+        <div class="social-btn">in</div>
+        <div class="social-btn">📸</div>
+        <div class="social-btn">▶</div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="nav.services">Services</h4>
+      <ul>
+        <li><a href="#services">Landscape Design</a></li>
+        <li><a href="#services">Lawn Maintenance</a></li>
+        <li><a href="#services">Irrigation</a></li>
+        <li><a href="#services">Hardscaping</a></li>
+        <li><a href="#services">Tree Care</a></li>
+        <li><a href="#services">Lighting</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer.company">Company</h4>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer.contact">Contact</h4>
+      <ul>
+        <li><a href="#contact">Free Consultation</a></li>
+        <li><a href="#">Emergency Services</a></li>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p data-i18n="footer.copy">© 2026 GreenScape Pro. All rights reserved.</p>
+    <p data-i18n="footer.lic">Licensed Contractor #LC-20017 · Fully Insured</p>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<div class="lang-toast" id="langToast"></div>
+
+<script>
+// ─── TRANSLATIONS ────────────────────────────────────────────────────────────
+const T = {
+  en: {
+    'nav.services':'Services','nav.about':'About','nav.portfolio':'Portfolio','nav.reviews':'Reviews','nav.cta':'Free Quote',
+    'hero.badge':'Serving the Greater Metro Area Since 2001',
+    'hero.title':'We Transform Outdoor<br><span>Spaces Into Living Art</span>',
+    'hero.sub':'Award-winning landscape design, installation, and maintenance tailored to your vision. From intimate garden retreats to grand commercial estates.',
+    'hero.btn.quote':'Get a Free Quote','hero.btn.work':'View Our Work',
+    'hero.stat1':'Projects Completed','hero.stat2':'Of Experience','hero.stat3':'Average Rating',
+    'svc.eyebrow':'What We Do','svc.title':'Comprehensive Landscaping Services',
+    'svc.desc':'From concept to completion, we handle every detail so you can enjoy a beautiful outdoor space without the hassle.',
+    's1.title':'Landscape Design','s1.desc':'Custom design plans crafted by certified landscape architects. We blend aesthetics, function, and sustainability for spaces that endure.',
+    's2.title':'Lawn Care & Maintenance','s2.desc':'Regular mowing, edging, fertilization, and seasonal clean-ups. Flexible weekly or bi-weekly programs to keep your lawn pristine year-round.',
+    's3.title':'Irrigation Systems','s3.desc':'Smart irrigation design and installation that cuts water usage by up to 40%. We also service and winterize existing systems.',
+    's4.title':'Hardscaping','s4.desc':'Patios, retaining walls, pathways, and outdoor kitchens built with premium materials. Structures designed to complement your landscape.',
+    's5.title':'Tree & Shrub Care','s5.desc':'ISA-certified arborists for pruning, deep-root fertilization, disease treatment, and safe removal of hazardous trees.',
+    's6.title':'Outdoor Lighting','s6.desc':'Professional low-voltage LED landscape lighting to highlight architecture and plantings while extending your outdoor living hours.',
+    'about.eyebrow':'About GreenScape Pro','about.title':'Rooted in Passion, Grown Through Dedication',
+    'about.desc':'Founded in 2001 by landscape architect Marcus Cole, GreenScape Pro has grown from a two-person operation into a 60-strong team of horticulturists, designers, and craftspeople. We believe every outdoor space has untapped potential.',
+    'about.f1.title':'Award-Winning Design Team','about.f1.desc':'Recipients of the National Landscape Industry Award three years running, recognized for innovative and sustainable design.',
+    'about.f2.title':'Eco-Conscious Practices','about.f2.desc':'We use only organic fertilizers, native plantings, and water-wise techniques to protect local ecosystems.',
+    'about.f3.title':'Fully Licensed & Insured','about.f3.desc':'Every team member is background-checked, certified, and covered under full liability insurance for your peace of mind.',
+    'about.cta':'Work With Us','about.badge':'Years of Excellence',
+    'proc.eyebrow':'How It Works','proc.title':'Your Journey to a Beautiful Landscape',
+    'proc.desc':'A simple, transparent process from first call to final walk-through.',
+    'p1.title':'Free Consultation','p1.desc':'We visit your property, discuss your goals, and assess the space. No cost, no obligation — just possibilities.',
+    'p2.title':'Custom Design','p2.desc':'Our designers create a detailed plan with 3D renderings so you can visualize the finished result before we break ground.',
+    'p3.title':'Expert Installation','p3.desc':'Our skilled crew completes the work on schedule and on budget, with daily updates and zero hidden costs.',
+    'p4.title':'Ongoing Care','p4.desc':'Enroll in a maintenance plan and we\'ll keep your landscape picture-perfect through every season.',
+    'port.eyebrow':'Our Work','port.title':'Recent Projects','port.desc':'Every project is unique. Here\'s a glimpse at some of our favourite recent transformations.',
+    'pr1.title':'Lakeside Garden Retreat','pr1.type':'Residential Design & Installation',
+    'pr2.title':'Heritage Estate Formal Garden','pr2.type':'Design & Maintenance',
+    'pr3.title':'Resort-Style Pool Surround','pr3.type':'Hardscaping & Planting',
+    'pr4.title':'Natural Stone Patio','pr4.type':'Hardscaping',
+    'pr5.title':'Moonlit Garden Lighting','pr5.type':'Outdoor Lighting Design',
+    'tst.eyebrow':'Client Stories','tst.title':'What Our Clients Say',
+    'tst.desc':'Don\'t take our word for it — here\'s what homeowners and property managers say about working with us.',
+    't1.text':'GreenScape Pro completely transformed our backyard. From the initial design to the final plant, every detail was handled with incredible professionalism. Our neighbours keep asking who did it!',
+    't1.name':'Sarah & Robert Mitchell','t1.loc':'Riverside Heights — Residential',
+    't2.text':'As a property manager overseeing 12 commercial sites, I need a landscaping partner I can rely on completely. GreenScape Pro delivers consistent quality and always communicates proactively. Worth every penny.',
+    't2.name':'David Kim','t2.loc':'Urban Properties Group — Commercial',
+    't3.text':'The irrigation system they installed cut our water bill nearly in half, and our lawn has never looked better. Their eco-conscious approach was exactly what we were looking for. Highly recommend!',
+    't3.name':'Linda Torres','t3.loc':'Green Valley Estates — Residential',
+    'ct.eyebrow':'Get In Touch','ct.title':'Ready to Transform Your Space?',
+    'ct.desc':'Request a free, no-obligation consultation. We\'ll visit your property, discuss your vision, and provide a detailed estimate — usually within 48 hours.',
+    'ct.phone.title':'Call Us','ct.phone.desc':'(555) 320-7800 · Mon–Sat 7 am – 6 pm',
+    'ct.email.title':'Email Us','ct.area.title':'Service Area',
+    'ct.area.desc':'Metro City and surrounding areas within 60 miles',
+    'form.title':'Request a Free Quote','form.fname':'First Name','form.lname':'Last Name',
+    'form.phone':'Phone','form.email':'Email','form.service':'Service Interested In',
+    'form.fname.ph':'Jane','form.lname.ph':'Smith','form.email.ph':'jane@example.com',
+    'form.svc0':'Select a service…','form.svc7':'Multiple Services',
+    'form.message':'Tell Us About Your Project',
+    'form.msg.ph':'Describe your property, goals, timeline, or any questions…',
+    'form.submit':'Send My Request →','form.success':'✓ Request Sent! We\'ll be in touch within 48 hours.',
+    'footer.brand':'Creating extraordinary outdoor spaces since 2001. Licensed, insured, and dedicated to transforming your landscape vision into lasting reality.',
+    'footer.company':'Company','footer.contact':'Contact',
+    'footer.copy':'© 2026 GreenScape Pro. All rights reserved.',
+    'footer.lic':'Licensed Contractor #LC-20017 · Fully Insured'
+  },
+  es: {
+    'nav.services':'Servicios','nav.about':'Nosotros','nav.portfolio':'Proyectos','nav.reviews':'Reseñas','nav.cta':'Cotización Gratis',
+    'hero.badge':'Sirviendo el Área Metropolitana desde 2001',
+    'hero.title':'Transformamos Espacios<br><span>Exteriores en Arte Vivo</span>',
+    'hero.sub':'Diseño paisajístico galardonado, instalación y mantenimiento adaptados a su visión. Desde íntimos jardines hasta grandes propiedades comerciales.',
+    'hero.btn.quote':'Obtener Cotización Gratis','hero.btn.work':'Ver Nuestro Trabajo',
+    'hero.stat1':'Proyectos Completados','hero.stat2':'De Experiencia','hero.stat3':'Calificación Promedio',
+    'svc.eyebrow':'Lo Que Hacemos','svc.title':'Servicios Integrales de Paisajismo',
+    'svc.desc':'Del concepto a la finalización, manejamos cada detalle para que disfrute un hermoso espacio exterior sin complicaciones.',
+    's1.title':'Diseño de Jardines','s1.desc':'Planes de diseño personalizados elaborados por arquitectos paisajistas certificados. Combinamos estética, función y sostenibilidad.',
+    's2.title':'Cuidado y Mantenimiento del Césped','s2.desc':'Corte regular, bordeado, fertilización y limpieza estacional. Programas semanales o quincenales para mantener su jardín impecable todo el año.',
+    's3.title':'Sistemas de Riego','s3.desc':'Diseño e instalación de riego inteligente que reduce el consumo de agua hasta un 40%. También prestamos servicio a sistemas existentes.',
+    's4.title':'Pavimentación y Estructuras','s4.desc':'Patios, muros de contención, senderos y cocinas al aire libre construidos con materiales premium.',
+    's5.title':'Cuidado de Árboles y Arbustos','s5.desc':'Arboricultores certificados por ISA para poda, fertilización, tratamiento de enfermedades y remoción segura de árboles.',
+    's6.title':'Iluminación Exterior','s6.desc':'Iluminación LED profesional de bajo voltaje para resaltar la arquitectura y las plantas, extendiendo sus horas al aire libre.',
+    'about.eyebrow':'Sobre GreenScape Pro','about.title':'Con Raíces en la Pasión, Crecidos con Dedicación',
+    'about.desc':'Fundada en 2001 por el arquitecto paisajista Marcus Cole, GreenScape Pro ha crecido de una operación de dos personas a un equipo de 60 profesionales. Creemos que cada espacio exterior tiene un potencial sin explotar.',
+    'about.f1.title':'Equipo de Diseño Premiado','about.f1.desc':'Receptores del Premio Nacional de la Industria Paisajística tres años consecutivos, reconocidos por su diseño innovador y sostenible.',
+    'about.f2.title':'Prácticas Ecológicas','about.f2.desc':'Usamos solo fertilizantes orgánicos, plantas nativas y técnicas de ahorro de agua para proteger los ecosistemas locales.',
+    'about.f3.title':'Completamente Licenciados y Asegurados','about.f3.desc':'Cada miembro del equipo tiene verificación de antecedentes, está certificado y cubierto con seguro de responsabilidad completo.',
+    'about.cta':'Trabaja Con Nosotros','about.badge':'Años de Excelencia',
+    'proc.eyebrow':'Cómo Funciona','proc.title':'Tu Camino Hacia un Hermoso Jardín',
+    'proc.desc':'Un proceso simple y transparente desde la primera llamada hasta la entrega final.',
+    'p1.title':'Consulta Gratuita','p1.desc':'Visitamos su propiedad, discutimos sus objetivos y evaluamos el espacio. Sin costo, sin obligación — solo posibilidades.',
+    'p2.title':'Diseño Personalizado','p2.desc':'Nuestros diseñadores crean un plan detallado con renderizados 3D para visualizar el resultado antes de comenzar.',
+    'p3.title':'Instalación Experta','p3.desc':'Nuestro equipo completa el trabajo en tiempo y presupuesto, con actualizaciones diarias y cero costos ocultos.',
+    'p4.title':'Cuidado Continuo','p4.desc':'Inscríbase en un plan de mantenimiento y mantendremos su paisaje perfecto en todas las estaciones.',
+    'port.eyebrow':'Nuestro Trabajo','port.title':'Proyectos Recientes','port.desc':'Cada proyecto es único. Aquí un vistazo a algunas de nuestras transformaciones recientes favoritas.',
+    'pr1.title':'Retiro de Jardín Junto al Lago','pr1.type':'Diseño e Instalación Residencial',
+    'pr2.title':'Jardín Formal de Hacienda Histórica','pr2.type':'Diseño y Mantenimiento',
+    'pr3.title':'Entorno de Piscina Estilo Resort','pr3.type':'Pavimentación y Plantación',
+    'pr4.title':'Patio de Piedra Natural','pr4.type':'Pavimentación',
+    'pr5.title':'Iluminación de Jardín al Claro de Luna','pr5.type':'Diseño de Iluminación Exterior',
+    'tst.eyebrow':'Historias de Clientes','tst.title':'Lo Que Dicen Nuestros Clientes',
+    'tst.desc':'No tome solo nuestra palabra — esto es lo que dicen propietarios y administradores de propiedades sobre trabajar con nosotros.',
+    't1.text':'GreenScape Pro transformó completamente nuestro jardín trasero. Desde el diseño inicial hasta la última planta, cada detalle fue manejado con increíble profesionalismo. ¡Nuestros vecinos siguen preguntando quién lo hizo!',
+    't1.name':'Sarah y Roberto Mitchell','t1.loc':'Riverside Heights — Residencial',
+    't2.text':'Como administrador de 12 sitios comerciales, necesito un socio de paisajismo en el que pueda confiar completamente. GreenScape Pro entrega calidad consistente y siempre comunica proactivamente. Vale cada centavo.',
+    't2.name':'David Kim','t2.loc':'Urban Properties Group — Comercial',
+    't3.text':'El sistema de riego que instalaron redujo nuestra factura de agua casi a la mitad, y nuestro césped nunca había lucido mejor. Su enfoque ecológico era exactamente lo que buscábamos. ¡Muy recomendado!',
+    't3.name':'Linda Torres','t3.loc':'Green Valley Estates — Residencial',
+    'ct.eyebrow':'Contáctenos','ct.title':'¿Listo para Transformar Su Espacio?',
+    'ct.desc':'Solicite una consulta gratuita sin compromiso. Visitaremos su propiedad, discutiremos su visión y proporcionaremos una estimación detallada — generalmente dentro de 48 horas.',
+    'ct.phone.title':'Llámenos','ct.phone.desc':'(555) 320-7800 · Lun–Sáb 7 am – 6 pm',
+    'ct.email.title':'Escríbanos','ct.area.title':'Área de Servicio',
+    'ct.area.desc':'Ciudad Metro y áreas circundantes en un radio de 60 millas',
+    'form.title':'Solicitar Cotización Gratuita','form.fname':'Nombre','form.lname':'Apellido',
+    'form.phone':'Teléfono','form.email':'Correo Electrónico','form.service':'Servicio de Interés',
+    'form.fname.ph':'Juan','form.lname.ph':'García','form.email.ph':'juan@ejemplo.com',
+    'form.svc0':'Seleccione un servicio…','form.svc7':'Múltiples Servicios',
+    'form.message':'Cuéntenos Sobre Su Proyecto',
+    'form.msg.ph':'Describa su propiedad, objetivos, cronograma o cualquier pregunta…',
+    'form.submit':'Enviar Mi Solicitud →','form.success':'✓ ¡Solicitud Enviada! Nos pondremos en contacto en 48 horas.',
+    'footer.brand':'Creando espacios exteriores extraordinarios desde 2001. Licenciados, asegurados y dedicados a transformar su visión paisajística en realidad duradera.',
+    'footer.company':'Empresa','footer.contact':'Contacto',
+    'footer.copy':'© 2026 GreenScape Pro. Todos los derechos reservados.',
+    'footer.lic':'Contratista Licenciado #LC-20017 · Totalmente Asegurado'
+  },
+  fr: {
+    'nav.services':'Services','nav.about':'À Propos','nav.portfolio':'Réalisations','nav.reviews':'Avis','nav.cta':'Devis Gratuit',
+    'hero.badge':'Au service de la région métropolitaine depuis 2001',
+    'hero.title':'Nous Transformons Vos<br><span>Espaces Extérieurs en Art Vivant</span>',
+    'hero.sub':'Conception paysagère primée, installation et entretien adaptés à votre vision. Des retraites jardinées intimes aux grands domaines commerciaux.',
+    'hero.btn.quote':'Obtenir un Devis Gratuit','hero.btn.work':'Voir Nos Réalisations',
+    'hero.stat1':'Projets Réalisés','hero.stat2':'D\'Expérience','hero.stat3':'Note Moyenne',
+    'svc.eyebrow':'Ce Que Nous Faisons','svc.title':'Services de Paysagisme Complets',
+    'svc.desc':'Du concept à la réalisation, nous gérons chaque détail pour que vous profitiez d\'un bel espace extérieur sans tracas.',
+    's1.title':'Conception Paysagère','s1.desc':'Plans de conception personnalisés élaborés par des architectes paysagistes certifiés. Nous harmonisons esthétique, fonctionnalité et durabilité.',
+    's2.title':'Entretien de Pelouse','s2.desc':'Tonte régulière, bordures, fertilisation et nettoyage saisonnier. Programmes hebdomadaires ou bihebdomadaires pour un gazon impeccable toute l\'année.',
+    's3.title':'Systèmes d\'Irrigation','s3.desc':'Conception et installation d\'irrigation intelligente réduisant la consommation d\'eau jusqu\'à 40 %. Nous entretenons également les systèmes existants.',
+    's4.title':'Aménagement Extérieur','s4.desc':'Terrasses, murs de soutènement, allées et cuisines d\'extérieur construits avec des matériaux premium.',
+    's5.title':'Soin des Arbres et Arbustes','s5.desc':'Arboristes certifiés ISA pour l\'élagage, la fertilisation, le traitement des maladies et l\'abattage sécurisé des arbres dangereux.',
+    's6.title':'Éclairage Extérieur','s6.desc':'Éclairage LED basse tension professionnel pour mettre en valeur l\'architecture et les plantations tout en prolongeant vos soirées en plein air.',
+    'about.eyebrow':'À Propos de GreenScape Pro','about.title':'Enracinés dans la Passion, Cultivés par la Dévotion',
+    'about.desc':'Fondée en 2001 par l\'architecte paysagiste Marcus Cole, GreenScape Pro est passée d\'une équipe de deux personnes à une équipe de 60 experts. Nous croyons que chaque espace extérieur recèle un potentiel inexploité.',
+    'about.f1.title':'Équipe de Conception Primée','about.f1.desc':'Lauréats du Prix National de l\'Industrie Paysagère trois années consécutives, reconnus pour leur conception innovante et durable.',
+    'about.f2.title':'Pratiques Écologiques','about.f2.desc':'Nous utilisons uniquement des engrais biologiques, des plantations indigènes et des techniques d\'économie d\'eau pour protéger les écosystèmes locaux.',
+    'about.f3.title':'Entièrement Agréés et Assurés','about.f3.desc':'Chaque membre de l\'équipe est vérifié, certifié et couvert par une assurance responsabilité civile complète pour votre tranquillité d\'esprit.',
+    'about.cta':'Travaillez Avec Nous','about.badge':'Années d\'Excellence',
+    'proc.eyebrow':'Comment Ça Fonctionne','proc.title':'Votre Parcours Vers un Beau Paysage',
+    'proc.desc':'Un processus simple et transparent du premier appel jusqu\'à la livraison finale.',
+    'p1.title':'Consultation Gratuite','p1.desc':'Nous visitons votre propriété, discutons de vos objectifs et évaluons l\'espace. Sans frais, sans engagement — que des possibilités.',
+    'p2.title':'Conception Personnalisée','p2.desc':'Nos designers créent un plan détaillé avec des rendus 3D pour visualiser le résultat final avant de commencer les travaux.',
+    'p3.title':'Installation Experte','p3.desc':'Notre équipe qualifiée réalise les travaux dans les délais et le budget convenus, avec des mises à jour quotidiennes et zéro coût caché.',
+    'p4.title':'Entretien Continu','p4.desc':'Souscrivez à un plan d\'entretien et nous maintiendrons votre paysage parfait tout au long de chaque saison.',
+    'port.eyebrow':'Nos Réalisations','port.title':'Projets Récents','port.desc':'Chaque projet est unique. Voici un aperçu de certaines de nos transformations récentes préférées.',
+    'pr1.title':'Retraite de Jardin au Bord du Lac','pr1.type':'Conception et Installation Résidentielle',
+    'pr2.title':'Jardin Formel de Domaine Historique','pr2.type':'Conception et Entretien',
+    'pr3.title':'Espace Piscine Style Resort','pr3.type':'Aménagement et Plantation',
+    'pr4.title':'Terrasse en Pierre Naturelle','pr4.type':'Aménagement Extérieur',
+    'pr5.title':'Éclairage de Jardin au Clair de Lune','pr5.type':'Conception d\'Éclairage Extérieur',
+    'tst.eyebrow':'Témoignages Clients','tst.title':'Ce Que Disent Nos Clients',
+    'tst.desc':'Ne vous fiez pas qu\'à notre parole — voici ce que disent les propriétaires et gestionnaires immobiliers de leur expérience avec nous.',
+    't1.text':'GreenScape Pro a complètement transformé notre jardin. Du design initial à la dernière plante, chaque détail a été géré avec un professionnalisme remarquable. Nos voisins ne cessent de demander qui a fait ça !',
+    't1.name':'Sarah & Robert Mitchell','t1.loc':'Riverside Heights — Résidentiel',
+    't2.text':'En tant que gestionnaire supervisant 12 sites commerciaux, j\'ai besoin d\'un partenaire paysagiste entièrement fiable. GreenScape Pro livre une qualité constante et communique toujours de manière proactive. Chaque centime en vaut la peine.',
+    't2.name':'David Kim','t2.loc':'Urban Properties Group — Commercial',
+    't3.text':'Le système d\'irrigation qu\'ils ont installé a réduit notre facture d\'eau de moitié, et notre pelouse n\'a jamais été aussi belle. Leur approche écologique était exactement ce que nous recherchions. Hautement recommandé !',
+    't3.name':'Linda Torres','t3.loc':'Green Valley Estates — Résidentiel',
+    'ct.eyebrow':'Nous Contacter','ct.title':'Prêt à Transformer Votre Espace ?',
+    'ct.desc':'Demandez une consultation gratuite sans engagement. Nous visiterons votre propriété, discuterons de votre vision et fournirons un devis détaillé — généralement dans les 48 heures.',
+    'ct.phone.title':'Appelez-Nous','ct.phone.desc':'(555) 320-7800 · Lun–Sam 7h – 18h',
+    'ct.email.title':'Écrivez-Nous','ct.area.title':'Zone de Service',
+    'ct.area.desc':'Ville Métro et environs dans un rayon de 100 km',
+    'form.title':'Demander un Devis Gratuit','form.fname':'Prénom','form.lname':'Nom',
+    'form.phone':'Téléphone','form.email':'Adresse E-mail','form.service':'Service Souhaité',
+    'form.fname.ph':'Marie','form.lname.ph':'Dupont','form.email.ph':'marie@exemple.fr',
+    'form.svc0':'Sélectionnez un service…','form.svc7':'Plusieurs Services',
+    'form.message':'Parlez-Nous de Votre Projet',
+    'form.msg.ph':'Décrivez votre propriété, vos objectifs, vos délais ou toute question…',
+    'form.submit':'Envoyer Ma Demande →','form.success':'✓ Demande Envoyée ! Nous vous contacterons dans les 48 heures.',
+    'footer.brand':'Créer des espaces extérieurs extraordinaires depuis 2001. Agréés, assurés et dédiés à transformer votre vision paysagère en réalité durable.',
+    'footer.company':'Entreprise','footer.contact':'Contact',
+    'footer.copy':'© 2026 GreenScape Pro. Tous droits réservés.',
+    'footer.lic':'Entrepreneur Agréé #LC-20017 · Entièrement Assuré'
+  },
+  de: {
+    'nav.services':'Leistungen','nav.about':'Über Uns','nav.portfolio':'Portfolio','nav.reviews':'Bewertungen','nav.cta':'Gratis Angebot',
+    'hero.badge':'Seit 2001 in der Metropolregion tätig',
+    'hero.title':'Wir Verwandeln Außenbereiche<br><span>In Lebendige Kunst</span>',
+    'hero.sub':'Preisgekröntes Landschaftsdesign, Installation und Pflege nach Ihren Vorstellungen. Von intimen Gartenrückzugsorten bis hin zu großen gewerblichen Anlagen.',
+    'hero.btn.quote':'Kostenloses Angebot','hero.btn.work':'Unsere Arbeiten',
+    'hero.stat1':'Abgeschlossene Projekte','hero.stat2':'Erfahrung','hero.stat3':'Durchschnittliche Bewertung',
+    'svc.eyebrow':'Was Wir Tun','svc.title':'Umfassende Landschaftsgestaltung',
+    'svc.desc':'Vom Konzept bis zur Fertigstellung kümmern wir uns um jedes Detail, damit Sie Ihren schönen Außenbereich ohne Aufwand genießen können.',
+    's1.title':'Gartenplanung','s1.desc':'Individuelle Entwurfspläne von zertifizierten Landschaftsarchitekten. Wir verbinden Ästhetik, Funktion und Nachhaltigkeit.',
+    's2.title':'Rasenpflege & Wartung','s2.desc':'Regelmäßiges Mähen, Kantenstechen, Düngen und saisonale Reinigungen. Flexible Wochen- oder Zweiwochenprogramme.',
+    's3.title':'Bewässerungssysteme','s3.desc':'Intelligente Bewässerungsplanung, die den Wasserverbrauch um bis zu 40 % senkt. Wir warten und winterfest machen auch bestehende Anlagen.',
+    's4.title':'Hartlandschaft','s4.desc':'Terrassen, Stützmauern, Wege und Außenküchen aus Premiummaterialien. Strukturen, die Ihre Landschaft ergänzen.',
+    's5.title':'Baum- & Stranchpflege','s5.desc':'ISA-zertifizierte Baumpfleger für Schnitt, Tiefendüngung, Behandlung von Krankheiten und sichere Fällung von Gefahrenbäumen.',
+    's6.title':'Außenbeleuchtung','s6.desc':'Professionelle LED-Niederspannungsbeleuchtung zur Betonung von Architektur und Bepflanzung sowie zur Verlängerung Ihrer Abende im Freien.',
+    'about.eyebrow':'Über GreenScape Pro','about.title':'Mit Leidenschaft Verwurzelt, Durch Hingabe Gewachsen',
+    'about.desc':'GreenScape Pro wurde 2001 von Landschaftsarchitekt Marcus Cole gegründet und hat sich von einem Zweipersonenteam zu einem 60-köpfigen Team aus Gärtnern, Designern und Handwerkern entwickelt.',
+    'about.f1.title':'Preisgekröntes Designteam','about.f1.desc':'Dreifacher Gewinner des Nationalen Landschaftsbaupreises, anerkannt für innovatives und nachhaltiges Design.',
+    'about.f2.title':'Umweltbewusste Praktiken','about.f2.desc':'Wir verwenden ausschließlich organische Düngemittel, einheimische Pflanzen und wassersparende Techniken zum Schutz lokaler Ökosysteme.',
+    'about.f3.title':'Vollständig Lizenziert & Versichert','about.f3.desc':'Jedes Teammitglied ist überprüft, zertifiziert und durch eine vollständige Haftpflichtversicherung abgedeckt.',
+    'about.cta':'Mit Uns Arbeiten','about.badge':'Jahre Exzellenz',
+    'proc.eyebrow':'So Funktioniert Es','proc.title':'Ihr Weg zu einer Schönen Landschaft',
+    'proc.desc':'Ein einfacher, transparenter Prozess vom ersten Anruf bis zur abschließenden Übergabe.',
+    'p1.title':'Kostenlose Beratung','p1.desc':'Wir besuchen Ihr Grundstück, besprechen Ihre Ziele und bewerten den Raum. Keine Kosten, keine Verpflichtung — nur Möglichkeiten.',
+    'p2.title':'Individuelles Design','p2.desc':'Unsere Designer erstellen einen detaillierten Plan mit 3D-Renderings, damit Sie das Endergebnis visualisieren können.',
+    'p3.title':'Fachkundige Installation','p3.desc':'Unser erfahrenes Team erledigt die Arbeit pünktlich und budgetgerecht, mit täglichen Updates und ohne versteckte Kosten.',
+    'p4.title':'Laufende Pflege','p4.desc':'Melden Sie sich für einen Pflegeplan an und wir halten Ihre Landschaft durch jede Jahreszeit makellos.',
+    'port.eyebrow':'Unsere Arbeiten','port.title':'Aktuelle Projekte','port.desc':'Jedes Projekt ist einzigartig. Hier ein Einblick in einige unserer jüngsten Lieblingstransformationen.',
+    'pr1.title':'Seegarten-Rückzugsort','pr1.type':'Wohnbau Design & Installation',
+    'pr2.title':'Formaler Garten eines Herrenhauses','pr2.type':'Design & Pflege',
+    'pr3.title':'Pool-Umgebung im Resort-Stil','pr3.type':'Hartlandschaft & Bepflanzung',
+    'pr4.title':'Natursteintetrasse','pr4.type':'Hartlandschaft',
+    'pr5.title':'Mondlicht-Gartenbeleuchtung','pr5.type':'Außenbeleuchtungsdesign',
+    'tst.eyebrow':'Kundenstimmen','tst.title':'Was Unsere Kunden Sagen',
+    'tst.desc':'Vertrauen Sie nicht nur unserem Wort — hier ist, was Hausbesitzer und Immobilienverwalter über die Zusammenarbeit mit uns sagen.',
+    't1.text':'GreenScape Pro hat unseren Hinterhof komplett verwandelt. Vom ersten Entwurf bis zur letzten Pflanze wurde jedes Detail mit bemerkenswerter Professionalität behandelt. Unsere Nachbarn fragen ständig, wer das gemacht hat!',
+    't1.name':'Sarah & Robert Mitchell','t1.loc':'Riverside Heights — Wohnbereich',
+    't2.text':'Als Immobilienverwalter, der 12 gewerbliche Standorte betreut, brauche ich einen Landschaftspartner, auf den ich mich vollständig verlassen kann. GreenScape Pro liefert beständige Qualität und kommuniziert immer proaktiv.',
+    't2.name':'David Kim','t2.loc':'Urban Properties Group — Gewerblich',
+    't3.text':'Das von ihnen installierte Bewässerungssystem hat unsere Wasserrechnung fast halbiert, und unser Rasen sah noch nie so gut aus. Ihr umweltbewusster Ansatz war genau das, was wir suchten. Sehr empfehlenswert!',
+    't3.name':'Linda Torres','t3.loc':'Green Valley Estates — Wohnbereich',
+    'ct.eyebrow':'Kontakt Aufnehmen','ct.title':'Bereit, Ihren Raum Zu Verwandeln?',
+    'ct.desc':'Fordern Sie eine kostenlose, unverbindliche Beratung an. Wir besuchen Ihr Grundstück, besprechen Ihre Vision und liefern einen detaillierten Kostenvoranschlag — in der Regel innerhalb von 48 Stunden.',
+    'ct.phone.title':'Rufen Sie Uns An','ct.phone.desc':'(555) 320-7800 · Mo–Sa 7 – 18 Uhr',
+    'ct.email.title':'Schreiben Sie Uns','ct.area.title':'Servicegebiet',
+    'ct.area.desc':'Metro Stadt und Umgebung im Umkreis von 100 km',
+    'form.title':'Kostenloses Angebot Anfordern','form.fname':'Vorname','form.lname':'Nachname',
+    'form.phone':'Telefon','form.email':'E-Mail-Adresse','form.service':'Gewünschte Leistung',
+    'form.fname.ph':'Anna','form.lname.ph':'Müller','form.email.ph':'anna@beispiel.de',
+    'form.svc0':'Bitte auswählen…','form.svc7':'Mehrere Leistungen',
+    'form.message':'Erzählen Sie Uns Von Ihrem Projekt',
+    'form.msg.ph':'Beschreiben Sie Ihr Grundstück, Ihre Ziele, Ihren Zeitplan oder Ihre Fragen…',
+    'form.submit':'Anfrage Senden →','form.success':'✓ Anfrage Gesendet! Wir melden uns innerhalb von 48 Stunden.',
+    'footer.brand':'Seit 2001 schaffen wir außergewöhnliche Außenbereiche. Lizenziert, versichert und engagiert, Ihre Gartentraum-Vision in dauerhafte Realität umzusetzen.',
+    'footer.company':'Unternehmen','footer.contact':'Kontakt',
+    'footer.copy':'© 2026 GreenScape Pro. Alle Rechte vorbehalten.',
+    'footer.lic':'Lizenzierter Auftragnehmer #LC-20017 · Vollversichert'
+  },
+  pt: {
+    'nav.services':'Serviços','nav.about':'Sobre Nós','nav.portfolio':'Portfólio','nav.reviews':'Avaliações','nav.cta':'Orçamento Grátis',
+    'hero.badge':'Servindo a Grande Área Metropolitana desde 2001',
+    'hero.title':'Transformamos Espaços<br><span>Externos em Arte Viva</span>',
+    'hero.sub':'Design paisagístico premiado, instalação e manutenção sob medida para a sua visão. De jardins residenciais íntimos a grandes propriedades comerciais.',
+    'hero.btn.quote':'Obter Orçamento Grátis','hero.btn.work':'Ver Nosso Trabalho',
+    'hero.stat1':'Projetos Concluídos','hero.stat2':'De Experiência','hero.stat3':'Avaliação Média',
+    'svc.eyebrow':'O Que Fazemos','svc.title':'Serviços Completos de Paisagismo',
+    'svc.desc':'Do conceito à conclusão, cuidamos de cada detalhe para que você aproveite um belo espaço externo sem complicações.',
+    's1.title':'Design de Jardins','s1.desc':'Planos de design personalizados por arquitetos paisagistas certificados. Unimos estética, função e sustentabilidade para espaços que perduram.',
+    's2.title':'Cuidado e Manutenção de Gramado','s2.desc':'Corte regular, bordas, fertilização e limpezas sazonais. Programas semanais ou quinzenais para manter seu gramado impecável o ano todo.',
+    's3.title':'Sistemas de Irrigação','s3.desc':'Design e instalação de irrigação inteligente que reduz o consumo de água em até 40%. Também fazemos manutenção em sistemas existentes.',
+    's4.title':'Paisagismo Duro','s4.desc':'Pátios, muros de contenção, caminhos e cozinhas externas com materiais premium. Estruturas projetadas para complementar sua paisagem.',
+    's5.title':'Cuidado de Árvores e Arbustos','s5.desc':'Arboristas certificados pela ISA para poda, fertilização profunda, tratamento de doenças e remoção segura de árvores perigosas.',
+    's6.title':'Iluminação Externa','s6.desc':'Iluminação LED profissional de baixa tensão para destacar a arquitetura e as plantas, prolongando suas horas ao ar livre.',
+    'about.eyebrow':'Sobre a GreenScape Pro','about.title':'Com Raízes na Paixão, Crescidos pela Dedicação',
+    'about.desc':'Fundada em 2001 pelo arquiteto paisagista Marcus Cole, a GreenScape Pro cresceu de uma operação de duas pessoas para uma equipe de 60 profissionais. Acreditamos que todo espaço externo tem potencial inexplorado.',
+    'about.f1.title':'Equipe de Design Premiada','about.f1.desc':'Ganhadores do Prêmio Nacional da Indústria Paisagística por três anos consecutivos, reconhecidos por design inovador e sustentável.',
+    'about.f2.title':'Práticas Ecológicas','about.f2.desc':'Usamos apenas fertilizantes orgânicos, plantações nativas e técnicas de uso eficiente da água para proteger os ecossistemas locais.',
+    'about.f3.title':'Totalmente Licenciados e Segurados','about.f3.desc':'Cada membro da equipe tem verificação de antecedentes, é certificado e coberto por seguro de responsabilidade civil completo.',
+    'about.cta':'Trabalhe Conosco','about.badge':'Anos de Excelência',
+    'proc.eyebrow':'Como Funciona','proc.title':'Sua Jornada Para uma Bela Paisagem',
+    'proc.desc':'Um processo simples e transparente da primeira chamada até a entrega final.',
+    'p1.title':'Consulta Gratuita','p1.desc':'Visitamos sua propriedade, discutimos seus objetivos e avaliamos o espaço. Sem custo, sem obrigação — apenas possibilidades.',
+    'p2.title':'Design Personalizado','p2.desc':'Nossos designers criam um plano detalhado com renderizações 3D para que você visualize o resultado antes do início das obras.',
+    'p3.title':'Instalação Especializada','p3.desc':'Nossa equipe qualificada conclui o trabalho no prazo e no orçamento, com atualizações diárias e zero custos ocultos.',
+    'p4.title':'Cuidado Contínuo','p4.desc':'Cadastre-se em um plano de manutenção e manteremos sua paisagem perfeita em todas as estações do ano.',
+    'port.eyebrow':'Nosso Trabalho','port.title':'Projetos Recentes','port.desc':'Cada projeto é único. Aqui está um vislumbre de algumas das nossas transformações recentes favoritas.',
+    'pr1.title':'Refúgio de Jardim à Beira do Lago','pr1.type':'Design e Instalação Residencial',
+    'pr2.title':'Jardim Formal de Hacienda Histórica','pr2.type':'Design e Manutenção',
+    'pr3.title':'Entorno de Piscina Estilo Resort','pr3.type':'Paisagismo Duro e Plantio',
+    'pr4.title':'Pátio de Pedra Natural','pr4.type':'Paisagismo Duro',
+    'pr5.title':'Iluminação de Jardim ao Luar','pr5.type':'Design de Iluminação Externa',
+    'tst.eyebrow':'Histórias de Clientes','tst.title':'O Que Nossos Clientes Dizem',
+    'tst.desc':'Não acredite apenas em nós — veja o que proprietários e administradores de imóveis dizem sobre trabalhar conosco.',
+    't1.text':'A GreenScape Pro transformou completamente nosso quintal. Do design inicial à última planta, cada detalhe foi tratado com incrível profissionalismo. Nossos vizinhos continuam perguntando quem fez isso!',
+    't1.name':'Sarah & Robert Mitchell','t1.loc':'Riverside Heights — Residencial',
+    't2.text':'Como gerente de propriedades supervisionando 12 locais comerciais, preciso de um parceiro de paisagismo em que possa confiar completamente. A GreenScape Pro entrega qualidade consistente e sempre se comunica proativamente.',
+    't2.name':'David Kim','t2.loc':'Urban Properties Group — Comercial',
+    't3.text':'O sistema de irrigação que eles instalaram reduziu nossa conta de água quase pela metade, e nosso gramado nunca ficou tão bonito. A abordagem ecológica deles era exatamente o que procurávamos. Altamente recomendado!',
+    't3.name':'Linda Torres','t3.loc':'Green Valley Estates — Residencial',
+    'ct.eyebrow':'Entre em Contato','ct.title':'Pronto para Transformar Seu Espaço?',
+    'ct.desc':'Solicite uma consulta gratuita sem compromisso. Visitaremos sua propriedade, discutiremos sua visão e forneceremos um orçamento detalhado — geralmente em 48 horas.',
+    'ct.phone.title':'Ligue Para Nós','ct.phone.desc':'(555) 320-7800 · Seg–Sáb 7h – 18h',
+    'ct.email.title':'Envie um E-mail','ct.area.title':'Área de Atendimento',
+    'ct.area.desc':'Cidade Metro e arredores em um raio de 100 km',
+    'form.title':'Solicitar Orçamento Gratuito','form.fname':'Nome','form.lname':'Sobrenome',
+    'form.phone':'Telefone','form.email':'E-mail','form.service':'Serviço de Interesse',
+    'form.fname.ph':'João','form.lname.ph':'Silva','form.email.ph':'joao@exemplo.com.br',
+    'form.svc0':'Selecione um serviço…','form.svc7':'Múltiplos Serviços',
+    'form.message':'Conte-Nos Sobre Seu Projeto',
+    'form.msg.ph':'Descreva sua propriedade, objetivos, prazo ou qualquer dúvida…',
+    'form.submit':'Enviar Minha Solicitação →','form.success':'✓ Solicitação Enviada! Entraremos em contato em 48 horas.',
+    'footer.brand':'Criando espaços externos extraordinários desde 2001. Licenciados, segurados e dedicados a transformar sua visão paisagística em realidade duradoura.',
+    'footer.company':'Empresa','footer.contact':'Contato',
+    'footer.copy':'© 2026 GreenScape Pro. Todos os direitos reservados.',
+    'footer.lic':'Contratante Licenciado #LC-20017 · Totalmente Segurado'
+  },
+  zh: {
+    'nav.services':'服务项目','nav.about':'关于我们','nav.portfolio':'项目案例','nav.reviews':'客户评价','nav.cta':'免费报价',
+    'hero.badge':'自2001年起服务大都市地区',
+    'hero.title':'我们将户外空间<br><span>化为生动艺术</span>',
+    'hero.sub':'屡获殊荣的景观设计、施工和维护，量身定制以实现您的愿景。从私密花园到大型商业庄园，一应俱全。',
+    'hero.btn.quote':'获取免费报价','hero.btn.work':'查看我们的作品',
+    'hero.stat1':'已完成项目','hero.stat2':'经验积累','hero.stat3':'平均评分',
+    'svc.eyebrow':'我们的服务','svc.title':'全方位景观服务',
+    'svc.desc':'从概念到竣工，我们处理每一个细节，让您轻松享受美丽的户外空间。',
+    's1.title':'景观设计','s1.desc':'由认证景观建筑师精心打造的定制设计方案，融合美学、功能与可持续性，打造经久耐用的空间。',
+    's2.title':'草坪养护与维护','s2.desc':'定期修剪、边缘整理、施肥及季节性清洁，提供灵活的周度或双周度服务方案。',
+    's3.title':'灌溉系统','s3.desc':'智能灌溉设计与安装，节水率高达40%。我们同样为现有系统提供维护和冬季防护服务。',
+    's4.title':'硬质景观','s4.desc':'采用优质材料打造露台、挡土墙、小径及户外厨房，与整体景观完美融合。',
+    's5.title':'树木和灌木养护','s5.desc':'ISA认证的树艺师，提供修剪、深根施肥、病虫害防治及危险树木安全移除服务。',
+    's6.title':'户外照明','s6.desc':'专业低压LED景观照明，突显建筑美感与植物层次，延长您的户外生活时光。',
+    'about.eyebrow':'关于GreenScape Pro','about.title':'以热情为根，以专注为养',
+    'about.desc':'GreenScape Pro由景观建筑师Marcus Cole于2001年创立，已从最初的两人团队成长为拥有60名园艺师、设计师和工匠的专业团队。我们相信每个户外空间都蕴藏无限潜力。',
+    'about.f1.title':'屡获殊荣的设计团队','about.f1.desc':'连续三年荣获全国景观行业奖，以创新和可持续设计获得广泛认可。',
+    'about.f2.title':'环保理念','about.f2.desc':'我们只使用有机肥料、本地植物和节水技术，保护当地生态系统。',
+    'about.f3.title':'完全持牌及投保','about.f3.desc':'每位团队成员均经过背景核查、持有认证，并享有全额责任保险保障，让您安心无忧。',
+    'about.cta':'与我们合作','about.badge':'年卓越服务',
+    'proc.eyebrow':'服务流程','proc.title':'您的美丽景观之旅',
+    'proc.desc':'从第一次通话到最终验收，全程简洁透明。',
+    'p1.title':'免费咨询','p1.desc':'我们上门考察您的场地，了解您的需求并评估空间。零费用、无义务，只有无限可能。',
+    'p2.title':'定制设计','p2.desc':'设计师为您制作详细方案和3D效果图，让您在施工前便能直观看到最终效果。',
+    'p3.title':'专业施工','p3.desc':'我们的专业团队按时按预算完成施工，每日提供进度更新，零隐藏费用。',
+    'p4.title':'持续养护','p4.desc':'加入养护计划，我们将在每个季节为您的景观保持完美状态。',
+    'port.eyebrow':'精选案例','port.title':'近期项目','port.desc':'每个项目都独一无二。以下是我们近期最喜爱的一些改造案例。',
+    'pr1.title':'湖畔花园度假地','pr1.type':'住宅设计与施工',
+    'pr2.title':'历史庄园正式花园','pr2.type':'设计与维护',
+    'pr3.title':'度假风格泳池环境','pr3.type':'硬质景观与种植',
+    'pr4.title':'天然石材露台','pr4.type':'硬质景观',
+    'pr5.title':'月光花园照明','pr5.type':'户外照明设计',
+    'tst.eyebrow':'客户心声','tst.title':'客户怎么说',
+    'tst.desc':'听听房主和物业管理人员与我们合作的真实感受。',
+    't1.text':'GreenScape Pro彻底改变了我们的后院。从最初的设计到最后一棵植物，每个细节都以令人难以置信的专业精神处理。我们的邻居一直在问是谁做的！',
+    't1.name':'Sarah & Robert Mitchell','t1.loc':'Riverside Heights — 住宅',
+    't2.text':'作为管理12个商业场所的物业经理，我需要一个完全可以信赖的景观合作伙伴。GreenScape Pro提供始终如一的品质，并且始终主动沟通。物超所值。',
+    't2.name':'David Kim','t2.loc':'Urban Properties Group — 商业',
+    't3.text':'他们安装的灌溉系统使我们的水费减少了近一半，我们的草坪从未如此美观。他们的环保理念正是我们一直在寻找的。强烈推荐！',
+    't3.name':'Linda Torres','t3.loc':'Green Valley Estates — 住宅',
+    'ct.eyebrow':'联系我们','ct.title':'准备好改造您的空间了吗？',
+    'ct.desc':'申请免费无义务咨询。我们将上门考察您的场地，讨论您的愿景，并在48小时内提供详细报价。',
+    'ct.phone.title':'致电我们','ct.phone.desc':'(555) 320-7800 · 周一至周六 上午7时–下午6时',
+    'ct.email.title':'发送邮件','ct.area.title':'服务范围',
+    'ct.area.desc':'大都市及周边100公里以内区域',
+    'form.title':'申请免费报价','form.fname':'名字','form.lname':'姓氏',
+    'form.phone':'电话','form.email':'电子邮件','form.service':'感兴趣的服务',
+    'form.fname.ph':'张','form.lname.ph':'伟','form.email.ph':'zhang@example.com',
+    'form.svc0':'请选择服务…','form.svc7':'多项服务',
+    'form.message':'告诉我们您的项目需求',
+    'form.msg.ph':'请描述您的场地、目标、时间安排或任何问题…',
+    'form.submit':'发送我的申请 →','form.success':'✓ 申请已发送！我们将在48小时内与您联系。',
+    'footer.brand':'自2001年起打造卓越户外空间。持牌、投保，致力于将您的景观愿景转化为持久现实。',
+    'footer.company':'公司','footer.contact':'联系方式',
+    'footer.copy':'© 2026 GreenScape Pro. 保留所有权利。',
+    'footer.lic':'持牌承包商 #LC-20017 · 全额投保'
+  },
+  ar: {
+    'nav.services':'الخدمات','nav.about':'من نحن','nav.portfolio':'أعمالنا','nav.reviews':'التقييمات','nav.cta':'عرض مجاني',
+    'hero.badge':'نخدم المنطقة الكبرى منذ عام 2001',
+    'hero.title':'نحوّل المساحات الخارجية<br><span>إلى فن حي</span>',
+    'hero.sub':'تصميم مناظر طبيعية حائز على جوائز، تركيب وصيانة مصمَّمة وفق رؤيتك. من حدائق المنازل الأنيقة إلى العقارات التجارية الكبرى.',
+    'hero.btn.quote':'احصل على عرض مجاني','hero.btn.work':'استعرض أعمالنا',
+    'hero.stat1':'مشروع مكتمل','hero.stat2':'من الخبرة','hero.stat3':'متوسط التقييم',
+    'svc.eyebrow':'ما نقدمه','svc.title':'خدمات تنسيق حدائق شاملة',
+    'svc.desc':'من الفكرة حتى التسليم، نتولى كل التفاصيل لتستمتع بمساحة خارجية جميلة دون أي متاعب.',
+    's1.title':'تصميم المناظر الطبيعية','s1.desc':'خطط تصميم مخصصة من مهندسي المناظر الطبيعية المعتمدين، تجمع بين الجماليات والوظيفية والاستدامة.',
+    's2.title':'العناية بالعشب والصيانة','s2.desc':'قص منتظم وتحديد حواف وتسميد وتنظيف موسمي. برامج أسبوعية أو نصف شهرية لحديقة مثالية على مدار السنة.',
+    's3.title':'أنظمة الري','s3.desc':'تصميم وتركيب أنظمة ري ذكية توفر حتى 40% من استهلاك المياه. نقدم أيضاً خدمات صيانة الأنظمة القائمة.',
+    's4.title':'الأعمال الإنشائية','s4.desc':'تراسات ومستندات وممرات ومطابخ خارجية من مواد فاخرة مصممة لتكمّل طابع حديقتك.',
+    's5.title':'العناية بالأشجار والشجيرات','s5.desc':'أخصائيو الأشجار المعتمدون من ISA للتقليم والتسميد العميق ومعالجة الأمراض وإزالة الأشجار الخطرة بأمان.',
+    's6.title':'الإضاءة الخارجية','s6.desc':'إضاءة LED احترافية منخفضة الجهد لإبراز التصاميم المعمارية والنباتات مع تمديد ساعات الاستمتاع في الهواء الطلق.',
+    'about.eyebrow':'عن GreenScape Pro','about.title':'جذورنا في الشغف ونمونا بالتفاني',
+    'about.desc':'أسسها عام 2001 مهندس المناظر الطبيعية ماركوس كول، نمت GreenScape Pro من عمل ثنائي إلى فريق من 60 متخصصاً في البستنة والتصميم والحرف. نؤمن أن كل مساحة خارجية تحمل إمكانات غير مستغلة.',
+    'about.f1.title':'فريق تصميم حائز على جوائز','about.f1.desc':'حصلنا على جائزة صناعة المناظر الطبيعية الوطنية ثلاث سنوات متتالية، معترفاً بنا على تصميم مبتكر ومستدام.',
+    'about.f2.title':'ممارسات صديقة للبيئة','about.f2.desc':'نستخدم فقط الأسمدة العضوية والنباتات المحلية وتقنيات ترشيد المياه لحماية النظم البيئية المحلية.',
+    'about.f3.title':'مرخصون ومؤمَّن عليهم بالكامل','about.f3.desc':'كل عضو في الفريق خضع للتدقيق في الخلفية وحاصل على شهادات مغطى بتأمين كامل المسؤولية لراحة بالك.',
+    'about.cta':'اعمل معنا','about.badge':'عاماً من التميز',
+    'proc.eyebrow':'كيف نعمل','proc.title':'رحلتك نحو مناظر طبيعية رائعة',
+    'proc.desc':'عملية بسيطة وشفافة من المكالمة الأولى حتى الاستلام النهائي.',
+    'p1.title':'استشارة مجانية','p1.desc':'نزور عقارك ونناقش أهدافك ونقيّم المساحة. بدون تكلفة وبدون التزام — فقط إمكانيات.',
+    'p2.title':'تصميم مخصص','p2.desc':'يضع مصمموك خطة تفصيلية مع مخططات ثلاثية الأبعاد لتتخيل النتيجة النهائية قبل البدء.',
+    'p3.title':'تركيب احترافي','p3.desc':'فريقنا المهاري يُنجز العمل في الوقت المحدد وفي حدود الميزانية مع تحديثات يومية وصفر تكاليف خفية.',
+    'p4.title':'رعاية مستمرة','p4.desc':'انضم لخطة صيانة وسنحافظ على مناظرك الطبيعية مثالية في كل موسم.',
+    'port.eyebrow':'أعمالنا','port.title':'مشاريع حديثة','port.desc':'كل مشروع فريد من نوعه. إليك لمحة عن بعض أحدث تحولاتنا المفضلة.',
+    'pr1.title':'ملاذ حديقة على شاطئ البحيرة','pr1.type':'تصميم وتركيب سكني',
+    'pr2.title':'حديقة رسمية لضيعة تاريخية','pr2.type':'تصميم وصيانة',
+    'pr3.title':'محيط مسبح على طراز المنتجعات','pr3.type':'أعمال إنشائية وزراعة',
+    'pr4.title':'فناء من الحجر الطبيعي','pr4.type':'أعمال إنشائية',
+    'pr5.title':'إضاءة الحديقة بضوء القمر','pr5.type':'تصميم الإضاءة الخارجية',
+    'tst.eyebrow':'قصص عملائنا','tst.title':'ماذا يقول عملاؤنا',
+    'tst.desc':'لا تأخذ كلامنا فقط — إليك ما يقوله أصحاب المنازل ومديرو العقارات عن تجربة العمل معنا.',
+    't1.text':'حوّلت GreenScape Pro باحة منزلنا تماماً. من التصميم الأولي حتى آخر نبتة، تم التعامل مع كل تفصيل باحترافية رائعة. لا يزال جيراننا يسألون من أنجز هذا العمل!',
+    't1.name':'سارة وروبرت ميتشيل','t1.loc':'Riverside Heights — سكني',
+    't2.text':'بوصفي مدير عقارات يشرف على 12 موقعاً تجارياً، أحتاج إلى شريك في تنسيق الحدائق يمكنني الاعتماد عليه بالكامل. GreenScape Pro تقدم جودة ثابتة وتتواصل دائماً بشكل استباقي.',
+    't2.name':'David Kim','t2.loc':'Urban Properties Group — تجاري',
+    't3.text':'خفّض نظام الري الذي ركّبوه فاتورة المياه لدينا بنحو النصف، ولم تبدُ حديقتنا بهذه الروعة من قبل. نهجهم الصديق للبيئة كان بالضبط ما كنا نبحث عنه. موصى به بشدة!',
+    't3.name':'Linda Torres','t3.loc':'Green Valley Estates — سكني',
+    'ct.eyebrow':'تواصل معنا','ct.title':'هل أنت مستعد لتحويل مساحتك؟',
+    'ct.desc':'اطلب استشارة مجانية بدون التزام. سنزور عقارك ونناقش رؤيتك ونقدم تقديراً تفصيلياً — عادةً خلال 48 ساعة.',
+    'ct.phone.title':'اتصل بنا','ct.phone.desc':'(555) 320-7800 · الإثنين–السبت 7ص – 6م',
+    'ct.email.title':'راسلنا','ct.area.title':'منطقة الخدمة',
+    'ct.area.desc':'المدينة الكبرى والمناطق المحيطة بها في نطاق 100 كم',
+    'form.title':'طلب عرض أسعار مجاني','form.fname':'الاسم الأول','form.lname':'اسم العائلة',
+    'form.phone':'رقم الهاتف','form.email':'البريد الإلكتروني','form.service':'الخدمة المطلوبة',
+    'form.fname.ph':'أحمد','form.lname.ph':'محمد','form.email.ph':'ahmed@example.com',
+    'form.svc0':'اختر خدمة…','form.svc7':'خدمات متعددة',
+    'form.message':'أخبرنا عن مشروعك',
+    'form.msg.ph':'صِف عقارك وأهدافك وجدولك الزمني أو أي أسئلة لديك…',
+    'form.submit':'إرسال طلبي ←','form.success':'✓ تم إرسال الطلب! سنتواصل معك خلال 48 ساعة.',
+    'footer.brand':'نصنع مساحات خارجية استثنائية منذ 2001. مرخصون ومؤمَّن عليهم ومكرسون لتحويل رؤيتك إلى واقع دائم.',
+    'footer.company':'الشركة','footer.contact':'التواصل',
+    'footer.copy':'© 2026 GreenScape Pro. جميع الحقوق محفوظة.',
+    'footer.lic':'مقاول مرخص رقم LC-20017 · مؤمَّن بالكامل'
+  },
+  hi: {
+    'nav.services':'सेवाएं','nav.about':'हमारे बारे में','nav.portfolio':'परियोजनाएं','nav.reviews':'समीक्षाएं','nav.cta':'मुफ्त कोटेशन',
+    'hero.badge':'2001 से महानगर क्षेत्र की सेवा में',
+    'hero.title':'हम बाहरी स्थानों को<br><span>जीवंत कला में बदलते हैं</span>',
+    'hero.sub':'पुरस्कार विजेता लैंडस्केप डिजाइन, इंस्टॉलेशन और रखरखाव — आपकी दृष्टि के अनुसार तैयार। छोटे बगीचों से लेकर बड़े व्यावसायिक संपदाओं तक।',
+    'hero.btn.quote':'मुफ्त कोटेशन पाएं','hero.btn.work':'हमारा काम देखें',
+    'hero.stat1':'पूर्ण परियोजनाएं','hero.stat2':'अनुभव','hero.stat3':'औसत रेटिंग',
+    'svc.eyebrow':'हम क्या करते हैं','svc.title':'व्यापक लैंडस्केपिंग सेवाएं',
+    'svc.desc':'अवधारणा से लेकर पूर्णता तक, हम हर विवरण संभालते हैं ताकि आप बिना झंझट के एक सुंदर बाहरी स्थान का आनंद ले सकें।',
+    's1.title':'लैंडस्केप डिजाइन','s1.desc':'प्रमाणित लैंडस्केप आर्किटेक्ट द्वारा तैयार कस्टम डिजाइन योजनाएं।',
+    's2.title':'लॉन केयर और रखरखाव','s2.desc':'नियमित घास काटना, किनारे करना, उर्वरक देना और मौसमी सफाई।',
+    's3.title':'सिंचाई प्रणाली','s3.desc':'स्मार्ट सिंचाई डिजाइन जो पानी के उपयोग को 40% तक कम करती है।',
+    's4.title':'हार्डस्केपिंग','s4.desc':'प्रीमियम सामग्री से निर्मित आंगन, दीवारें, रास्ते और आउटडोर किचन।',
+    's5.title':'पेड़ और झाड़ी देखभाल','s5.desc':'ISA प्रमाणित वृक्ष विशेषज्ञ — छंटाई, उपचार और सुरक्षित वृक्ष हटाने के लिए।',
+    's6.title':'आउटडोर लाइटिंग','s6.desc':'पेशेवर LED लैंडस्केप लाइटिंग जो आपके बाहरी जीवन के घंटों को बढ़ाती है।',
+    'about.eyebrow':'GreenScape Pro के बारे में','about.title':'जुनून से जड़ें, समर्पण से विकास',
+    'about.desc':'2001 में लैंडस्केप आर्किटेक्ट मार्कस कोल द्वारा स्थापित, GreenScape Pro दो लोगों से बढ़कर 60 विशेषज्ञों की टीम बन गई है।',
+    'about.f1.title':'पुरस्कार विजेता डिजाइन टीम','about.f1.desc':'नवीन और टिकाऊ डिजाइन के लिए तीन वर्षों तक राष्ट्रीय लैंडस्केप उद्योग पुरस्कार के विजेता।',
+    'about.f2.title':'पर्यावरण अनुकूल प्रथाएं','about.f2.desc':'हम केवल जैविक उर्वरकों, देशी पौधों और जल बचत तकनीकों का उपयोग करते हैं।',
+    'about.f3.title':'पूरी तरह लाइसेंस प्राप्त और बीमित','about.f3.desc':'हर टीम सदस्य पृष्ठभूमि-जाँचा, प्रमाणित और पूर्ण देनदारी बीमा के तहत है।',
+    'about.cta':'हमारे साथ काम करें','about.badge':'वर्षों की उत्कृष्टता',
+    'proc.eyebrow':'यह कैसे काम करता है','proc.title':'एक सुंदर परिदृश्य की आपकी यात्रा',
+    'proc.desc':'पहली कॉल से अंतिम वॉक-थ्रू तक एक सरल, पारदर्शी प्रक्रिया।',
+    'p1.title':'मुफ्त परामर्श','p1.desc':'हम आपकी संपत्ति का दौरा करते हैं, आपके लक्ष्यों पर चर्चा करते हैं। कोई लागत नहीं, कोई दायित्व नहीं।',
+    'p2.title':'कस्टम डिजाइन','p2.desc':'हमारे डिजाइनर 3D रेंडरिंग के साथ एक विस्तृत योजना बनाते हैं।',
+    'p3.title':'विशेषज्ञ स्थापना','p3.desc':'हमारी कुशल टीम समय पर और बजट में काम पूरा करती है।',
+    'p4.title':'चल रही देखभाल','p4.desc':'रखरखाव योजना में नामांकन करें और हम हर मौसम में आपके परिदृश्य को बनाए रखेंगे।',
+    'port.eyebrow':'हमारा काम','port.title':'हालिया परियोजनाएं','port.desc':'हर परियोजना अनोखी है। यहां हमारे कुछ पसंदीदा हालिया बदलावों की एक झलक है।',
+    'pr1.title':'झील किनारे बगीचे का आश्रय','pr1.type':'आवासीय डिजाइन और स्थापना',
+    'pr2.title':'ऐतिहासिक संपदा का औपचारिक बगीचा','pr2.type':'डिजाइन और रखरखाव',
+    'pr3.title':'रिसॉर्ट-शैली पूल परिवेश','pr3.type':'हार्डस्केपिंग और रोपण',
+    'pr4.title':'प्राकृतिक पत्थर आंगन','pr4.type':'हार्डस्केपिंग',
+    'pr5.title':'चाँदनी बगीचे की रोशनी','pr5.type':'आउटडोर लाइटिंग डिजाइन',
+    'tst.eyebrow':'ग्राहक कहानियां','tst.title':'हमारे ग्राहक क्या कहते हैं',
+    'tst.desc':'सिर्फ हमारी बात पर भरोसा न करें — यहां घर के मालिक और संपत्ति प्रबंधक क्या कहते हैं।',
+    't1.text':'GreenScape Pro ने हमारे पिछवाड़े को पूरी तरह बदल दिया। शुरुआती डिजाइन से लेकर अंतिम पौधे तक, हर विवरण अविश्वसनीय व्यावसायिकता के साथ संभाला गया।',
+    't1.name':'Sarah & Robert Mitchell','t1.loc':'Riverside Heights — आवासीय',
+    't2.text':'12 वाणिज्यिक स्थलों के संपत्ति प्रबंधक के रूप में, मुझे एक ऐसे लैंडस्केपिंग साझेदार की जरूरत है जिस पर मैं पूरी तरह भरोसा कर सकूं।',
+    't2.name':'David Kim','t2.loc':'Urban Properties Group — वाणिज्यिक',
+    't3.text':'उन्होंने जो सिंचाई प्रणाली स्थापित की, उसने हमारे पानी के बिल को लगभग आधा कर दिया। उनका पर्यावरण-अनुकूल दृष्टिकोण बिल्कुल वैसा था जैसा हम चाहते थे।',
+    't3.name':'Linda Torres','t3.loc':'Green Valley Estates — आवासीय',
+    'ct.eyebrow':'संपर्क करें','ct.title':'अपना स्थान बदलने के लिए तैयार हैं?',
+    'ct.desc':'मुफ्त, बिना दायित्व परामर्श का अनुरोध करें। हम आपकी संपत्ति का दौरा करेंगे और 48 घंटों के भीतर विस्तृत अनुमान प्रदान करेंगे।',
+    'ct.phone.title':'हमें कॉल करें','ct.phone.desc':'(555) 320-7800 · सोम–शनि सुबह 7 – शाम 6 बजे',
+    'ct.email.title':'ईमेल करें','ct.area.title':'सेवा क्षेत्र',
+    'ct.area.desc':'महानगर और आसपास के 100 किमी के क्षेत्र',
+    'form.title':'मुफ्त कोटेशन का अनुरोध करें','form.fname':'पहला नाम','form.lname':'अंतिम नाम',
+    'form.phone':'फोन','form.email':'ईमेल','form.service':'रुचि की सेवा',
+    'form.fname.ph':'राज','form.lname.ph':'शर्मा','form.email.ph':'raj@example.com',
+    'form.svc0':'सेवा चुनें…','form.svc7':'एकाधिक सेवाएं',
+    'form.message':'अपने प्रोजेक्ट के बारे में बताएं',
+    'form.msg.ph':'अपनी संपत्ति, लक्ष्य, समयसीमा या प्रश्नों का वर्णन करें…',
+    'form.submit':'मेरा अनुरोध भेजें →','form.success':'✓ अनुरोध भेजा गया! हम 48 घंटों में संपर्क करेंगे।',
+    'footer.brand':'2001 से असाधारण बाहरी स्थान बना रहे हैं। लाइसेंस प्राप्त, बीमित और आपकी लैंडस्केप दृष्टि को वास्तविकता में बदलने के लिए समर्पित।',
+    'footer.company':'कंपनी','footer.contact':'संपर्क',
+    'footer.copy':'© 2026 GreenScape Pro. सभी अधिकार सुरक्षित।',
+    'footer.lic':'लाइसेंस प्राप्त ठेकेदार #LC-20017 · पूरी तरह बीमित'
+  },
+  ru: {
+    'nav.services':'Услуги','nav.about':'О нас','nav.portfolio':'Портфолио','nav.reviews':'Отзывы','nav.cta':'Бесплатный расчёт',
+    'hero.badge':'Обслуживаем столичный регион с 2001 года',
+    'hero.title':'Мы Превращаем Открытые<br><span>Пространства в Живое Искусство</span>',
+    'hero.sub':'Отмеченный наградами ландшафтный дизайн, монтаж и уход, созданные для вашего видения. От уютных садовых уголков до грандиозных коммерческих поместий.',
+    'hero.btn.quote':'Получить Бесплатный Расчёт','hero.btn.work':'Посмотреть Наши Работы',
+    'hero.stat1':'Завершённых Проектов','hero.stat2':'Опыта','hero.stat3':'Средняя Оценка',
+    'svc.eyebrow':'Что Мы Делаем','svc.title':'Комплексные Услуги по Озеленению',
+    'svc.desc':'От идеи до реализации мы берём на себя все детали, чтобы вы могли наслаждаться красивым участком без лишних хлопот.',
+    's1.title':'Ландшафтный Дизайн','s1.desc':'Индивидуальные проекты от сертифицированных ландшафтных архитекторов. Мы сочетаем эстетику, функциональность и экологичность.',
+    's2.title':'Уход за Газоном','s2.desc':'Регулярная стрижка, подравнивание краёв, удобрение и сезонная уборка. Гибкие еженедельные или двухнедельные программы.',
+    's3.title':'Системы Орошения','s3.desc':'Проектирование и монтаж умных систем полива, снижающих расход воды до 40%. Также обслуживаем существующие системы.',
+    's4.title':'Твёрдое Мощение','s4.desc':'Террасы, подпорные стены, дорожки и летние кухни из премиальных материалов, дополняющих ваш ландшафт.',
+    's5.title':'Уход за Деревьями и Кустарниками','s5.desc':'Сертифицированные ISA арбористы для обрезки, глубокой корневой подкормки, лечения болезней и безопасного удаления опасных деревьев.',
+    's6.title':'Наружное Освещение','s6.desc':'Профессиональное светодиодное освещение низкого напряжения для выделения архитектурных элементов и растений.',
+    'about.eyebrow':'О компании GreenScape Pro','about.title':'Корни в Страсти, Рост через Преданность',
+    'about.desc':'Основанная в 2001 году ландшафтным архитектором Маркусом Коулом, GreenScape Pro выросла из команды двух человек в коллектив из 60 специалистов — садоводов, дизайнеров и мастеров.',
+    'about.f1.title':'Отмеченная наградами команда','about.f1.desc':'Трёхкратные лауреаты Национальной отраслевой премии в области ландшафтного дизайна за инновационные и устойчивые решения.',
+    'about.f2.title':'Экологичный Подход','about.f2.desc':'Мы используем только органические удобрения, местные растения и водосберегающие технологии для защиты местных экосистем.',
+    'about.f3.title':'Полностью Лицензированы и Застрахованы','about.f3.desc':'Каждый сотрудник проверен, сертифицирован и застрахован по полному полису ответственности для вашего спокойствия.',
+    'about.cta':'Работать с Нами','about.badge':'Лет Превосходства',
+    'proc.eyebrow':'Как Мы Работаем','proc.title':'Ваш Путь к Красивому Ландшафту',
+    'proc.desc':'Простой прозрачный процесс от первого звонка до финальной приёмки.',
+    'p1.title':'Бесплатная Консультация','p1.desc':'Выезжаем на объект, обсуждаем ваши цели и оцениваем пространство. Без затрат и без обязательств — только возможности.',
+    'p2.title':'Индивидуальный Проект','p2.desc':'Дизайнеры создают подробный план с 3D-визуализацией, чтобы вы могли оценить результат ещё до начала работ.',
+    'p3.title':'Профессиональный Монтаж','p3.desc':'Команда мастеров выполняет работу в срок и в рамках бюджета с ежедневными отчётами и нулевыми скрытыми расходами.',
+    'p4.title':'Постоянный Уход','p4.desc':'Подключитесь к плану обслуживания — мы сохраним ваш ландшафт безупречным в любой сезон.',
+    'port.eyebrow':'Наши Работы','port.title':'Последние Проекты','port.desc':'Каждый проект уникален. Вот несколько наших любимых недавних преобразований.',
+    'pr1.title':'Садовый Уголок у Озера','pr1.type':'Жилой Дизайн и Монтаж',
+    'pr2.title':'Формальный Сад Исторической Усадьбы','pr2.type':'Дизайн и Уход',
+    'pr3.title':'Бассейн в Стиле Курорта','pr3.type':'Мощение и Посадки',
+    'pr4.title':'Терраса из Натурального Камня','pr4.type':'Твёрдое Мощение',
+    'pr5.title':'Ночная Подсветка Сада','pr5.type':'Дизайн Наружного Освещения',
+    'tst.eyebrow':'Истории Клиентов','tst.title':'Что Говорят Наши Клиенты',
+    'tst.desc':'Не верьте только нам — вот что говорят домовладельцы и управляющие недвижимостью о работе с нами.',
+    't1.text':'GreenScape Pro полностью преобразила наш задний двор. От первоначального проекта до последнего растения каждая деталь была выполнена с невероятным профессионализмом.',
+    't1.name':'Сара и Роберт Митчелл','t1.loc':'Riverside Heights — Жилой',
+    't2.text':'Как управляющий 12 коммерческими объектами, мне нужен надёжный партнёр по озеленению. GreenScape Pro стабильно обеспечивает качество и всегда общается проактивно.',
+    't2.name':'Давид Ким','t2.loc':'Urban Properties Group — Коммерческий',
+    't3.text':'Установленная ими система полива сократила наш счёт за воду почти вдвое, а газон выглядит лучше, чем когда-либо. Их экологичный подход — именно то, что мы искали.',
+    't3.name':'Линда Торрес','t3.loc':'Green Valley Estates — Жилой',
+    'ct.eyebrow':'Свяжитесь с Нами','ct.title':'Готовы Преобразить Ваше Пространство?',
+    'ct.desc':'Запросите бесплатную консультацию без обязательств. Мы посетим ваш объект, обсудим видение и предоставим детальный расчёт — обычно в течение 48 часов.',
+    'ct.phone.title':'Позвоните Нам','ct.phone.desc':'(555) 320-7800 · Пн–Сб 7:00 – 18:00',
+    'ct.email.title':'Напишите Нам','ct.area.title':'Зона Обслуживания',
+    'ct.area.desc':'Мегаполис и прилегающие районы в радиусе 100 км',
+    'form.title':'Запрос Бесплатного Расчёта','form.fname':'Имя','form.lname':'Фамилия',
+    'form.phone':'Телефон','form.email':'Электронная почта','form.service':'Интересующая услуга',
+    'form.fname.ph':'Анна','form.lname.ph':'Иванова','form.email.ph':'anna@example.ru',
+    'form.svc0':'Выберите услугу…','form.svc7':'Несколько услуг',
+    'form.message':'Расскажите о Вашем Проекте',
+    'form.msg.ph':'Опишите участок, цели, сроки или задайте вопросы…',
+    'form.submit':'Отправить Заявку →','form.success':'✓ Заявка отправлена! Мы свяжемся с вами в течение 48 часов.',
+    'footer.brand':'Создаём исключительные пространства под открытым небом с 2001 года. Лицензированы, застрахованы и преданы делу воплощения вашей ландшафтной мечты.',
+    'footer.company':'Компания','footer.contact':'Контакты',
+    'footer.copy':'© 2026 GreenScape Pro. Все права защищены.',
+    'footer.lic':'Лицензированный подрядчик №LC-20017 · Полная страховка'
+  },
+  ja: {
+    'nav.services':'サービス','nav.about':'私たちについて','nav.portfolio':'施工事例','nav.reviews':'お客様の声','nav.cta':'無料見積もり',
+    'hero.badge':'2001年からメトロエリアを担当',
+    'hero.title':'屋外空間を<br><span>生きたアートへ変える</span>',
+    'hero.sub':'受賞歴のあるランドスケープデザイン、施工、メンテナンスをご提供します。プライベートガーデンから大型商業施設まで対応。',
+    'hero.btn.quote':'無料見積もりを取得','hero.btn.work':'施工事例を見る',
+    'hero.stat1':'完成プロジェクト数','hero.stat2':'の経験','hero.stat3':'平均評価',
+    'svc.eyebrow':'サービス内容','svc.title':'総合ランドスケープサービス',
+    'svc.desc':'構想から完成まで、すべての細部を担当します。手間なく美しい屋外空間をお楽しみください。',
+    's1.title':'ランドスケープデザイン','s1.desc':'認定ランドスケープアーキテクトによるカスタム設計プラン。美学・機能性・持続可能性を融合させた長持ちする空間を実現します。',
+    's2.title':'芝生ケアとメンテナンス','s2.desc':'定期的な芝刈り・縁取り・施肥・季節ごとのクリーンアップ。年間を通じて美しい芝生を維持する週次または隔週プログラム。',
+    's3.title':'灌漑システム','s3.desc':'水使用量を最大40%削減するスマート灌漑の設計と施工。既存システムのサービスと冬期対策も対応。',
+    's4.title':'ハードスケーピング','s4.desc':'高級素材を使ったパティオ、擁壁、小道、アウトドアキッチン。景観を引き立てる構造物を設計・施工します。',
+    's5.title':'樹木と低木のケア','s5.desc':'ISA認定アーボリストによる剪定・深根施肥・病気治療・危険木の安全な撤去。',
+    's6.title':'アウトドア照明','s6.desc':'建築物や植栽を引き立て、屋外での時間を延ばすプロフェッショナルな低電圧LEDランドスケープ照明。',
+    'about.eyebrow':'GreenScape Proについて','about.title':'情熱に根ざし、献身によって育つ',
+    'about.desc':'2001年にランドスケープアーキテクトのマーカス・コールが設立。2人の作業から始まり、今では造園家・デザイナー・職人60名のチームに成長しました。',
+    'about.f1.title':'受賞歴のあるデザインチーム','about.f1.desc':'革新的で持続可能なデザインにより、国内ランドスケープ業界賞を3年連続受賞。',
+    'about.f2.title':'環境配慮型のアプローチ','about.f2.desc':'有機肥料・在来植物・節水技術のみを使用し、地域の生態系を保護します。',
+    'about.f3.title':'完全認可・保険加入済み','about.f3.desc':'すべてのスタッフは身元調査済みで資格を持ち、完全賠償責任保険に加入しています。',
+    'about.cta':'一緒に作りましょう','about.badge':'年の卓越した実績',
+    'proc.eyebrow':'ご利用の流れ','proc.title':'美しい景観への旅',
+    'proc.desc':'初回のお問い合わせから最終確認まで、シンプルで透明なプロセスです。',
+    'p1.title':'無料相談','p1.desc':'現地訪問のうえ、ご要望の確認とスペースの評価を行います。費用不要・義務なし — 可能性を探るだけです。',
+    'p2.title':'カスタムデザイン','p2.desc':'デザイナーが3Dレンダリング付きの詳細プランを作成。着工前に完成イメージをご確認いただけます。',
+    'p3.title':'専門施工','p3.desc':'熟練したスタッフがスケジュール通り、予算内で作業を完了。毎日の進捗報告と隠れたコストはゼロ。',
+    'p4.title':'継続的なケア','p4.desc':'メンテナンスプランにご加入いただければ、年間を通じて完璧な景観を維持します。',
+    'port.eyebrow':'施工事例','port.title':'最近のプロジェクト','port.desc':'すべてのプロジェクトはユニーク。最近のお気に入りの事例をご紹介します。',
+    'pr1.title':'湖畔のガーデンリトリート','pr1.type':'住宅設計・施工',
+    'pr2.title':'歴史的邸宅のフォーマルガーデン','pr2.type':'設計・メンテナンス',
+    'pr3.title':'リゾートスタイルのプールサラウンド','pr3.type':'ハードスケーピング・植栽',
+    'pr4.title':'自然石のパティオ','pr4.type':'ハードスケーピング',
+    'pr5.title':'月明かりのガーデン照明','pr5.type':'アウトドア照明デザイン',
+    'tst.eyebrow':'お客様の声','tst.title':'お客様からのご感想',
+    'tst.desc':'私たちの言葉だけを信頼しないでください — 実際にお付き合いいただいたお客様のご感想です。',
+    't1.text':'GreenScape Proは私たちの裏庭を完全に変えました。初期デザインから最後の植物まで、すべての細部が驚くほどプロフェッショナルに対応されました。近所の方々が誰にお願いしたか聞いてきます！',
+    't1.name':'サラ & ロバート・ミッチェル','t1.loc':'Riverside Heights — 住宅',
+    't2.text':'12の商業施設を管理するプロパティマネジャーとして、完全に頼れる造園パートナーが必要です。GreenScape Proは安定した品質を提供し、常に積極的にコミュニケーションを取ってくれます。',
+    't2.name':'デビッド・キム','t2.loc':'Urban Properties Group — 商業',
+    't3.text':'彼らが設置した灌漑システムで水道代がほぼ半分になり、芝生はかつてないほど美しくなりました。環境への配慮は私たちが求めていたものそのものでした。',
+    't3.name':'リンダ・トレス','t3.loc':'Green Valley Estates — 住宅',
+    'ct.eyebrow':'お問い合わせ','ct.title':'スペースを変える準備はできていますか？',
+    'ct.desc':'無料・義務なしのご相談をお申し込みください。現地を訪問し、ご要望を伺い、通常48時間以内に詳細な見積もりをご提供します。',
+    'ct.phone.title':'お電話で','ct.phone.desc':'(555) 320-7800 · 月〜土 午前7時〜午後6時',
+    'ct.email.title':'メールで','ct.area.title':'サービスエリア',
+    'ct.area.desc':'市街地およびその周辺100km圏内',
+    'form.title':'無料見積もりのお申し込み','form.fname':'名（名前）','form.lname':'姓（苗字）',
+    'form.phone':'電話番号','form.email':'メールアドレス','form.service':'ご希望のサービス',
+    'form.fname.ph':'太郎','form.lname.ph':'田中','form.email.ph':'taro@example.jp',
+    'form.svc0':'サービスを選択…','form.svc7':'複数のサービス',
+    'form.message':'プロジェクトについて教えてください',
+    'form.msg.ph':'物件の状況、ご要望、スケジュール、ご質問などをご記入ください…',
+    'form.submit':'申し込みを送信 →','form.success':'✓ お申し込みを受け付けました！48時間以内にご連絡します。',
+    'footer.brand':'2001年から卓越した屋外空間を創造し続けています。認可取得・保険加入済みで、あなたの景観ビジョンを永続する現実に変えます。',
+    'footer.company':'会社情報','footer.contact':'お問い合わせ',
+    'footer.copy':'© 2026 GreenScape Pro. 全著作権所有。',
+    'footer.lic':'ライセンス取得業者 #LC-20017 · 完全保険加入済み'
+  }
+};
+
+// ─── LANGUAGE ENGINE ─────────────────────────────────────────────────────────
+let currentLang = 'en';
+
+function detectLanguage() {
+  const saved = localStorage.getItem('gs-lang');
+  if (saved && T[saved]) return saved;
+  const browser = (navigator.language || navigator.userLanguage || 'en').split('-')[0].toLowerCase();
+  return T[browser] ? browser : 'en';
+}
+
+function applyTranslation(lang) {
+  const t = T[lang] || T['en'];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (t[k] !== undefined) el.textContent = t[k];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const k = el.getAttribute('data-i18n-html');
+    if (t[k] !== undefined) el.innerHTML = t[k];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const k = el.getAttribute('data-i18n-placeholder');
+    if (t[k] !== undefined) el.placeholder = t[k];
+  });
+  // RTL
+  const rtl = ['ar', 'he', 'fa'].includes(lang);
+  document.documentElement.dir = rtl ? 'rtl' : 'ltr';
+  document.documentElement.lang = lang;
+  // Update button
+  document.getElementById('langCode').textContent = lang.toUpperCase();
+  // Mark active
+  document.querySelectorAll('.lang-menu a').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('onclick')?.includes(`'${lang}'`));
+  });
+  currentLang = lang;
+}
+
+function setLanguage(lang) {
+  localStorage.setItem('gs-lang', lang);
+  applyTranslation(lang);
+  document.getElementById('langMenu').classList.remove('open');
+}
+
+function toggleLangMenu(e) {
+  e.stopPropagation();
+  document.getElementById('langMenu').classList.toggle('open');
+}
+
+document.addEventListener('click', () => {
+  document.getElementById('langMenu').classList.remove('open');
+});
+
+function showToast(msg) {
+  const t = document.getElementById('langToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// Init
+(function init() {
+  const lang = detectLanguage();
+  const wasAuto = !localStorage.getItem('gs-lang');
+  applyTranslation(lang);
+  if (wasAuto && lang !== 'en') {
+    const names = {es:'Español',fr:'Français',de:'Deutsch',pt:'Português',zh:'中文',ar:'العربية',hi:'हिन्दी',ru:'Русский',ja:'日本語'};
+    setTimeout(() => showToast(`🌐 Language set to ${names[lang] || lang.toUpperCase()}`), 800);
+  }
+})();
+
+// ─── EXISTING SCRIPTS ────────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+  document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 400);
+});
+
+function toggleMenu() {
+  const links = document.querySelector('.nav-links');
+  if (links.style.display === 'flex') {
+    links.style.display = 'none';
+  } else {
+    links.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:rgba(26,60,42,.98);padding:20px 6%;gap:18px;';
+  }
+}
+
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    if (window.innerWidth <= 768) document.querySelector('.nav-links').style.display = 'none';
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+   EMAIL SETUP  —  3 steps, takes ~5 minutes
+   ───────────────────────────────────────────────────────────────────
+   1. Create a FREE EmailJS account at https://www.emailjs.com
+   2. Add an Email Service
+        Dashboard → Email Services → Add New Service
+        Choose Gmail → connect purifyeden@gmail.com → Save
+        Copy the Service ID into EMAIL_SERVICE_ID below
+
+   3. Create an Email Template
+        Dashboard → Email Templates → Create New Template
+        Set "To Email" to:  purifyeden@gmail.com
+        Paste this template body (or customise):
+        ─────────────────────────────────
+        New quote request from {{first_name}} {{last_name}}
+
+        Email:    {{reply_to}}
+        Phone:    {{phone}}
+        Service:  {{service}}
+
+        Message:
+        {{message}}
+        ─────────────────────────────────
+        Save → copy the Template ID into EMAIL_TEMPLATE_ID below
+
+   4. Go to Account → General → Public Key
+        Copy it into EMAIL_PUBLIC_KEY below
+
+   To change the recipient, update "To Email" in the EmailJS template.
+   ═══════════════════════════════════════════════════════════════════ */
+const EMAIL_SERVICE_ID  = 'service_803ss6x';   // ← paste your Service ID
+const EMAIL_TEMPLATE_ID = 'template_2gjlje5';  // ← paste your Template ID
+const EMAIL_PUBLIC_KEY  = 'zuPO6AyR-Xopy0g8X'; // ← paste your Public Key
+
+emailjs.init({ publicKey: EMAIL_PUBLIC_KEY });
+
+async function handleSubmit(e) {
+  e.preventDefault();
+  const form  = e.target;
+  const btn   = document.getElementById('formSubmitBtn');
+  const fb    = document.getElementById('formFeedback');
+  const t     = T[currentLang] || T['en'];
+
+  // Basic validation
+  const email = form.querySelector('[name="reply_to"]').value.trim();
+  const fname = form.querySelector('[name="first_name"]').value.trim();
+  if (!fname || !email) {
+    showFeedback(fb, 'Please fill in your name and email.', false);
+    return;
+  }
+
+  // Loading state
+  btn.disabled = true;
+  btn.textContent = '⏳ Sending…';
+  btn.style.opacity = '0.75';
+  fb.style.display = 'none';
+
+  // Check credentials are configured
+  if (EMAIL_SERVICE_ID.includes('xxxxxxx') || EMAIL_PUBLIC_KEY.includes('xxxxxx')) {
+    showFeedback(fb, '⚙️ Email not configured yet — see setup instructions in the source code.', false);
+    btn.textContent = t['form.submit'] || 'Send My Request →';
+    btn.style.opacity = '1';
+    btn.disabled = false;
+    return;
+  }
+
+  try {
+    await emailjs.sendForm(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, form);
+    showFeedback(fb, t['form.success'] || '✓ Request Sent! We\'ll be in touch within 48 hours.', true);
+    btn.textContent = '✓ Sent';
+    btn.style.background = 'var(--green-light)';
+    form.reset();
+    // Re-apply translated placeholders after reset
+    applyTranslation(currentLang);
+  } catch (err) {
+    console.error('EmailJS error:', err);
+    showFeedback(fb, '✗ Something went wrong. Please email us directly at hello@greenscapepro.com', false);
+    btn.textContent = t['form.submit'] || 'Send My Request →';
+    btn.style.opacity = '1';
+    btn.style.background = '';
+    btn.disabled = false;
+  }
+}
+
+function showFeedback(el, msg, success) {
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.background = success ? 'rgba(82,183,136,.15)' : 'rgba(192,57,43,.1)';
+  el.style.color       = success ? 'var(--green-mid)'    : '#c0392b';
+  el.style.border      = `1px solid ${success ? 'var(--green-light)' : '#e74c3c'}`;
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.service-card, .testimonial-card, .process-step, .portfolio-item').forEach(el => {
+  el.style.cssText += 'opacity:0;transform:translateY(24px);transition:opacity .5s ease,transform .5s ease,box-shadow .3s ease,border-top-color .3s ease;';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
